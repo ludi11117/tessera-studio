@@ -16,6 +16,7 @@ async function resolve(page,channel,choice){await page.locator(channel+' .draft-
 (async()=>{
   await ready();browser=await chromium.launch({headless:true,executablePath:'D:/CodexWork/cache/ms-playwright/chromium-1243/chrome-win64/chrome.exe',env});
   const context=await browser.newContext({viewport:{width:1512,height:1060}}),a=await context.newPage(),b=await context.newPage(),errors=[];
+  await context.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));
   for(const p of [a,b])p.on('pageerror',e=>errors.push(e.message));
   await a.goto(base);await a.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));
   await b.goto(base);await b.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));

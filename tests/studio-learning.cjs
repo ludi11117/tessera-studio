@@ -13,7 +13,7 @@ async function api(url,body){const r=await fetch(base+url,body===undefined?{}:{m
  browser=await chromium.launch({headless:true,executablePath:'D:/CodexWork/cache/ms-playwright/chromium-1243/chrome-win64/chrome.exe',env});
  const page=await browser.newPage({viewport:{width:1512,height:1060},reducedMotion:'reduce'}),errors=[],paid=[];page.on('pageerror',e=>errors.push(e.message));
  page.on('request',r=>{if(r.method()==='POST'&&/\/ai\/(generate|revise|repair)$/.test(new URL(r.url()).pathname))paid.push(r.url());});
- await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));
+ await page.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));
  await page.locator(`[data-session="${sid}"]`).click();await page.waitForSelector('.document-section');await page.locator('[data-tab=candidates]').click();await page.locator('[data-choice-mode=learning]').first().click();
  assert(await page.locator('#train-personal-preference').isDisabled());const original=await api('/api/sessions/'+sid);
  for(let i=0;i<8;i++){

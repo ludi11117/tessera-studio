@@ -13,7 +13,7 @@ function clean(a){delete a.exported_at;return a;}
   const page=await browser.newPage({viewport:{width:1512,height:1100},reducedMotion:'reduce'}),errors=[],paid=[],external=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.method()==='POST'&&/\/ai\/(generate|revise|repair)$/.test(new URL(r.url()).pathname))paid.push(r.url());});
   await page.route('**/*',r=>{if(new URL(r.request().url()).hostname!=='127.0.0.1'){external.push(r.request().url());return r.abort();}return r.continue();});
-  await page.goto(base);await page.waitForSelector('#try-choice-demo:not([hidden])');await page.locator('#try-choice-demo').click();
+  await page.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));await page.goto(base);await page.waitForSelector('#try-choice-demo:not([hidden])');await page.locator('#try-choice-demo').click();
   const sid=await page.evaluate(()=>localStorage.getItem('intent-studio-session')),before=clean(await api('/api/sessions/'+sid+'/audit'));
   await page.locator('[data-choice-mode=canvas]').click();await page.waitForSelector('.canvas-matrix');
   assert((await page.locator('.canvas-status').innerText()).includes('3 / 3'));

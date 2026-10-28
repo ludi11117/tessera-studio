@@ -13,7 +13,7 @@ async function changed(page,old){await page.waitForFunction(v=>document.querySel
   const page=await browser.newPage({viewport:{width:1512,height:1100},reducedMotion:'reduce'}),errors=[],modelPosts=[],external=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.method()==='POST'&&/\/ai\/(generate|revise|repair)$/.test(new URL(r.url()).pathname))modelPosts.push(r.url());});
   await page.route('**/*',r=>{if(new URL(r.request().url()).hostname!=='127.0.0.1'){external.push(r.request().url());return r.abort();}return r.continue();});
-  await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));
+  await page.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));
   assert.equal(await page.locator('.home-heading .journey-steps button').count(),4);
   await page.locator('.guide-entry [data-guide-open]').click();await page.waitForSelector('#guide-idea');
   await page.locator('#guide-idea').fill('做项目');await page.locator('[data-guide-category=project]').click();await page.locator('[data-guide-begin]').click();

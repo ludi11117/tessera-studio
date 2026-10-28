@@ -12,7 +12,7 @@ async function api(url,data){const r=await fetch(base+url,data===undefined?{}:{m
   for(let i=0;i<100;i++){try{if((await fetch(base+'/api/health')).ok)break;}catch{}await new Promise(r=>setTimeout(r,100));}
   browser=await chromium.launch({headless:true,executablePath:'D:/CodexWork/cache/ms-playwright/chromium-1243/chrome-win64/chrome.exe',env});
   const page=await browser.newPage({viewport:{width:1512,height:1060},reducedMotion:'reduce'}),errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));
+  await page.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));
   await page.locator('#goal-input').fill('编写一份本地项目实施方案，必须保留未确认安排，并按资料核对。');
   await page.locator('#generate-goal').click();await page.waitForSelector('.document-section');await page.waitForFunction(()=>!document.querySelector('#send-revision').disabled);
   const sid=await page.evaluate(()=>localStorage.getItem('intent-studio-session'));

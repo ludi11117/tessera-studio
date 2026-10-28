@@ -14,7 +14,7 @@ async function fits(page){const widths=await page.evaluate(()=>[innerWidth,docum
   const context=await browser.newContext({viewport:{width:1512,height:1060}}),page=await context.newPage(),errors=[],external=[],fontLoads=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(/\.(woff2|ttf)$/.test(r.url()))fontLoads.push({file:new URL(r.url()).pathname,bytes:Number(r.headers()['content-length'])});});
   await page.route('**/*',route=>{if(new URL(route.request().url()).hostname!=='127.0.0.1'){external.push(route.request().url());return route.abort();}return route.continue();});
-  await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));await page.evaluate(()=>document.fonts.ready);
+  await page.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));await page.evaluate(()=>document.fonts.ready);
   const initialFonts=[...fontLoads],initialFontBytes=initialFonts.reduce((n,f)=>n+f.bytes,0);
   assert(initialFontBytes>0&&initialFontBytes<2500000,JSON.stringify(initialFonts));assert(!initialFonts.some(f=>f.file.includes('SourceHan')));
   await page.screenshot({path:path.join(shots,'ai-product-v5-home.png'),fullPage:true});

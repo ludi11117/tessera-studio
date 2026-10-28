@@ -22,7 +22,7 @@ let browser;
     }
     const trained=timings.find(s=>s.pairs>0),warm=[];
     if(trained)for(let i=0;i<3;i++){const t=performance.now();await api('/api/sessions/'+trained.id+'/decision',{revision:trained.revision});warm.push(performance.now()-t);}
-    await page.goto(base);await page.waitForSelector('#try-choice-demo:not([hidden])');await page.locator('#try-choice-demo').click();
+    await page.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));await page.goto(base);await page.waitForSelector('#try-choice-demo:not([hidden])');await page.locator('#try-choice-demo').click();
     await page.locator('[data-choice-mode=canvas]').click();await page.waitForSelector('.canvas-matrix');
     const before=posts.length;
     await page.locator('[data-canvas-block=intro][data-canvas-variant=intro-0]').click();

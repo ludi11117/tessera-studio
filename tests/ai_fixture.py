@@ -8,7 +8,10 @@ def fixture_transport(path,payload=None):
         return {"data":[{"id":"test/fixture-model"}]}
     request=json.loads(payload['messages'][-1]['content'])
     operation=request['operation']
-    if operation=='围绕当前需求探索具体灵感':
+    if operation=='仅改写选中的文字':
+        count=2 if '恰好2个' in request['requirements'] else 1
+        value={'options':[{'label':'开发版本'+str(i+1),'replacement':request['selected_text']+('（表达更清楚）' if i==0 else '（换一种表达）')} for i in range(count)]}
+    elif operation=='围绕当前需求探索具体灵感':
         idea=request['intent_brief']['original_idea']
         value={'directions':[{'name':name,'instruction':instruction,'preview':idea+'：'+example,'tradeoff':tradeoff,'basis_quotes':[{'id':'goal','quote':idea[:160]}]} for name,instruction,example,tradeoff in [('先跑通核心','先实现本次目标的核心流程，再检查结果','先确认输入、完成核心操作、检查输出。','优先可验证，暂缓扩展。'),('先核对边界','先核对当前资料与限制，再确定实施顺序','把已知条件、未知事项、下一步核对动作列清楚。','优先减少不确定性，细节需进一步补齐。')]]}
     elif operation=='分析交付需求':

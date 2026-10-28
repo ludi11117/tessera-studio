@@ -14,7 +14,7 @@ async function fits(page,width){await page.setViewportSize({width,height:1000});
   const page=await browser.newPage({viewport:{width:1512,height:1060},reducedMotion:'reduce'}),errors=[],paid=[],external=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.method()==='POST'&&/\/ai\/(generate|revise|repair)$/.test(new URL(r.url()).pathname))paid.push(r.url());});
   await page.route('**/*',r=>{if(new URL(r.request().url()).hostname!=='127.0.0.1'){external.push(r.request().url());return r.abort();}return r.continue();});
-  await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));await page.evaluate(()=>document.fonts.ready);
+  await page.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));await page.evaluate(()=>document.fonts.ready);
   await page.screenshot({path:path.join(root,'docs/screenshots/product-v10-home.png'),fullPage:true});
   await page.locator('#try-decision-demo').click();await page.waitForSelector('.decision-next');
   const sid=await page.evaluate(()=>localStorage.getItem('intent-studio-session')),before=await api('/api/sessions/'+sid+'/audit'),view=await api('/api/sessions/'+sid);

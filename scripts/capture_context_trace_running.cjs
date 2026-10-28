@@ -16,7 +16,7 @@ const root=path.resolve(__dirname,'..'),temp='D:/CodexWork/temp/intent-context-t
     const page=await browser.newPage({viewport:{width:1512,height:1100},reducedMotion:'reduce'}),errors=[],posts=[];
     page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.method()==='POST')posts.push(new URL(r.url()).pathname);});
     await page.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.abort());
-    await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));
+    await page.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));
     assert.equal(await page.locator('.home-heading [data-journey]').count(),4);assert(await page.locator('.guide-entry [data-guide-open]').isVisible());
     if(port===8765){await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:path.join(root,'docs/screenshots/context-trace-running-home.png'),fullPage:true});}
     await page.locator('#try-choice-demo').click();await page.locator('[data-tab=document]').click();assert.equal(await page.locator('[data-preserve]').count(),2);

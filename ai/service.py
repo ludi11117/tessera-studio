@@ -196,6 +196,7 @@ class AIService:
     def retry(self,jid,body):
         previous=self.job(jid)
         if previous['status'] not in ('error','interrupted','cancelled'):raise Invalid('只有失败、中断或取消的任务可以重试')
+        if previous['kind']=='local_revise':raise Invalid('局部原文可能已变化，请重新选取后生成')
         inputs=previous['input']
         if previous['kind']=='inspire':
             payload={'guidance':inputs['guidance'],'materials':inputs.get('materials',[])}
@@ -264,6 +265,14 @@ class AIService:
                 from ai.inspiration import validate_selection
                 validate_selection(self,guidance,materials)
                 inputs['guidance']=guidance
+        elif kind=='local_revise':
+            from ai.local_revision import prepare as prepare_local
+            view=self.store.view(sid)
+            if type(body.get('revision')) is not int or body['revision']!=view['revision']:raise Conflict('正文已变化，请重新选取')
+            target=prepare_local(view,body);library=self.materials(sid)
+            if library['revision']!=view['revision']:raise Conflict('素材或正文已变化，请重新选取')
+            inputs={'view':{k:view[k] for k in ('task','state','revision')},'session_id':sid,'local_target':target,
+                    'instruction':target['instruction']+('；'+target['note'] if target['note'] else ''),'materials':library['materials']}
         elif kind in ("revise", "repair"):
             view=self.store.view(sid)
             if type(body.get("revision")) is not int or view["revision"]!=body["revision"]:raise Conflict("成稿已更新，请重新发起这次修改")
@@ -305,6 +314,9 @@ class AIService:
         try:
             job=self.job(jid)
             if job['kind']=='generate':result=self.generate(jid,job['input'])
+            elif job['kind']=='local_revise':
+                from ai.local_revision import run as local_run
+                result=local_run(self,jid,job['input'])
             elif job['kind']=='inspire':
                 from ai.inspiration import run as inspire_run
                 result=inspire_run(self,jid,job['input'])
@@ -528,6 +540,12 @@ class AIService:
     def apply(self,jid,body):
         with self.lock:
             job=self.job(jid);result=job["result"]
+            if job['kind']=='local_revise':
+                from ai.local_revision import apply as apply_local
+                apply_local(self,job,body)
+                result['applied']=True;result['applied_option']=body['option']
+                with closing(self.connect()) as db:db.execute('UPDATE jobs SET result=?,updated=? WHERE id=?',(encode(result),now(),jid))
+                return self.public_job(jid)
             if job["status"]!="completed" or job["kind"] not in ("revise","repair") or not result or not result.get("can_apply") or result.get("applied"):
                 raise Invalid("这个草案不能采用或已采用")
             if body.get("revision")!=result["base_revision"]:raise Conflict("成稿已发生变化，请基于新版本重新生成修改")

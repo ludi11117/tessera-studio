@@ -13,7 +13,7 @@ async function idle(page){await page.waitForFunction(()=>!S.busy);}
   const page=await browser.newPage({viewport:{width:1512,height:1100},reducedMotion:'reduce'}),errors=[],requests=[],external=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.method()==='POST'&&/\/ai\/(inspire|generate|revise|repair)$/.test(new URL(r.url()).pathname))requests.push(new URL(r.url()).pathname);});
   await page.route('**/*',r=>{if(new URL(r.request().url()).hostname!=='127.0.0.1'){external.push(r.request().url());return r.abort();}return r.continue();});
-  await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));
+  await page.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));
   await page.locator('#goal-input').fill('做校园失物招领，先验证发布与搜索');
   await page.locator('#material-files').setInputFiles({name:'已有条件.md',mimeType:'text/plain',buffer:Buffer.from('校园失物招领需要发布与搜索，不公开联系方式。')});
   await page.waitForFunction(()=>document.querySelector('#material-chips').textContent.includes('已有条件.md'));

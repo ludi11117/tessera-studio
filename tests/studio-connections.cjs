@@ -10,7 +10,7 @@ let browser,logs='';child.stdout.on('data',d=>logs+=d);child.stderr.on('data',d=
   browser=await chromium.launch({headless:true,executablePath:'D:/CodexWork/cache/ms-playwright/chromium-1243/chrome-win64/chrome.exe',env});
   const page=await browser.newPage({viewport:{width:1512,height:1060},reducedMotion:'reduce'}),errors=[],connects=[],paid=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.url().endsWith('/api/ai/connect'))connects.push(r.url());if(r.method()==='POST'&&/\/ai\/(generate|revise|repair)$/.test(new URL(r.url()).pathname))paid.push(r.url());});
-  await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));await page.locator('#open-settings').click();
+  await page.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));await page.locator('#open-settings').click();
   await page.locator('#connection-preset').selectOption('custom');await page.locator('#base-url-input').fill('https://model-a.example.test/v1');
   await page.locator('#api-key-input').fill('dummy-endpoint-a-browser-credential');await page.locator('#model-input').fill('manual/unknown-model');
   await page.locator('.connection-advanced summary').click();await page.locator('#provider-stream').uncheck();await page.locator('#provider-json').uncheck();await page.locator('#provider-temperature').uncheck();await page.locator('#provider-token-parameter').selectOption('max_completion_tokens');

@@ -12,7 +12,7 @@ async function waitRevision(page,old){await page.waitForFunction(v=>document.que
   browser=await chromium.launch({headless:true,executablePath:'D:/CodexWork/cache/ms-playwright/chromium-1243/chrome-win64/chrome.exe',env});
   const page=await browser.newPage({viewport:{width:1512,height:1060},reducedMotion:'reduce'}),errors=[],paidRequests=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.method()==='POST'&&/\/ai\/(generate|revise|repair)$/.test(new URL(r.url()).pathname))paidRequests.push(r.url());});
-  await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));
+  await page.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));await page.goto(base);await page.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('D 盘'));
   await page.locator('[data-type=project]').click();await page.locator('#choice-directions summary').click();
   assert.equal(await page.locator('[data-direction-name="0"]').inputValue(),'最快跑通闭环');
   await page.locator('[data-direction-name="0"]').fill('只先验证登记搜索');await page.locator('[data-direction-instruction="0"]').fill('明确暂缓认领自动化，先跑通本机登记与搜索。');

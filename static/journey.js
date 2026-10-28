@@ -39,7 +39,7 @@ function renderGuide(){
   $('#guidance-content').innerHTML=body;
   if(stage==='questions'&&question?.id==='direction')ensureContextGuide();
 }
-function renderGuidanceSummary(){
+function renderGuidanceSummary(){refreshFocused();
   const host=$('#guidance-summary');if(!host)return;const g=S.guidance;
   if(!g){host.hidden=true;return;}host.hidden=false;
   const stale=g.goal!==$('#goal-input').value.trim()||(S.taskType!=='auto'&&S.taskType!==g.category);
@@ -99,7 +99,7 @@ document.addEventListener('click',e=>{
   else if(b.dataset.journey){const step=b.dataset.journey;
     if(!S.sid){if(step==='idea'||step==='inspire')run(openGuide);}
     else if(step==='idea')activateTab('sources');
-    else if(step==='inspire'){S.choiceMode='canvas';renderChoiceBoard();activateTab('candidates');}
+    else if(step==='inspire'){S.choiceMode=focusedMode()?'compare':'canvas';renderChoiceBoard();activateTab('candidates');}
     else if(step==='refine')activateTab('document');else activateTab('sources');
   }
   else if(b.dataset.journeyExport)run(()=>exportArtifact(b.dataset.journeyExport==='body'?(S.view.task.category==='writing'?'txt':'md'):'zip'));

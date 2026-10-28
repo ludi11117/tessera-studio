@@ -17,7 +17,7 @@ const {chromium}=require('D:/CodexWork/cache/branchforge-browser/node_modules/pl
    const d=await request('/api/sessions/'+s.id+'/decision',{revision:s.revision});
    sessions.push({id:s.id,revision:s.revision,source:s.source,eligible:d.eligible,universe:d.universe,model:d.model.model_id||d.model.version,frontierPoints:d.frontier.length,feedback:d.pair_count,readOnly:d.read_only});
   }
-  await page.goto(base);await page.waitForSelector('#try-learning-demo:not([hidden])');await page.evaluate(()=>document.fonts.ready);
+  await page.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));await page.goto(base);await page.waitForSelector('#try-learning-demo:not([hidden])');await page.evaluate(()=>document.fonts.ready);
   await page.screenshot({path:path.join(root,'docs/screenshots/product-v10-home.png'),fullPage:true});
   const homeSizes=[];for(const width of [360,390,740,820,1024,1512]){await page.setViewportSize({width,height:1000});const r=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));assert(r.scroll<=r.width,JSON.stringify(r));homeSizes.push(r);}
   await page.setViewportSize({width:390,height:900});await page.screenshot({path:path.join(root,'docs/screenshots/product-v10-home-mobile.png'),fullPage:false});

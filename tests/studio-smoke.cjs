@@ -16,7 +16,7 @@ async function action(page,selector){const previous=await page.locator('#studio-
 (async()=>{
   await ready();browser=await chromium.launch({headless:true,downloadsPath:path.join(qa,'downloads'),executablePath:process.env.CHROMIUM_EXECUTABLE||'D:/CodexWork/cache/ms-playwright/chromium-1243/chrome-win64/chrome.exe',env});
   const context=await browser.newContext({viewport:{width:1512,height:1060}});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(base);await page.waitForFunction(()=>document.querySelector('#connection-label').textContent.includes('已配置'));
+  await page.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));await page.goto(base);await page.waitForFunction(()=>document.querySelector('#connection-label').textContent.includes('已配置'));
   await page.screenshot({path:path.join(shots,'ai-studio-home.png'),fullPage:true});
   await page.locator('#open-settings').click();await page.locator('#personal-preferences').fill('先给可执行步骤，少用空话，保留验收方式。');
   await page.locator('#settings-form button[type=submit]').click();await page.waitForFunction(()=>document.querySelector('#settings-feedback').textContent.includes('连接正常'));

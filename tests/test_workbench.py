@@ -226,7 +226,7 @@ class WorkbenchTests(unittest.TestCase):
 
         status, content = request("GET", "/")
         self.assertEqual(200, status)
-        self.assertIn("意图".encode(), content)
+        self.assertIn(b"<title>Tessera", content)
         status, _ = request("POST", "/api/sessions", {"clone": self.sid})
         self.assertEqual(201, status)
         self.assertTrue(all(s["source"] == "example" for s in self.store.sessions()))

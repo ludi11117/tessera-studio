@@ -8,7 +8,7 @@ const {chromium}=require('D:/CodexWork/cache/branchforge-browser/node_modules/pl
   const page=await browser.newPage({viewport:{width:1512,height:1060},reducedMotion:'reduce'}),errors=[],external=[],base='http://127.0.0.1:8765';
   page.on('pageerror',e=>errors.push(e.message));await page.route('**/*',r=>{if(new URL(r.request().url()).hostname!=='127.0.0.1'){external.push(r.request().url());return r.abort();}return r.continue();});
   const health=await (await page.request.get(base+'/api/health')).json();assert.equal(health.version,'product-v9');assert.equal(health.database,path.join(root,'data/workbench.sqlite3'));
-  const before=await (await page.request.get(base+'/api/sessions')).json();await page.goto(base);await page.waitForSelector('#try-learning-demo:not([hidden])');await page.evaluate(()=>document.fonts.ready);
+  const before=await (await page.request.get(base+'/api/sessions')).json();await page.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));await page.goto(base);await page.waitForSelector('#try-learning-demo:not([hidden])');await page.evaluate(()=>document.fonts.ready);
   await page.screenshot({path:path.join(root,'docs/screenshots/product-v9-home.png'),fullPage:true});await page.locator('#try-learning-demo').click();
   await page.waitForSelector('.learning-version-detail');assert((await page.locator('.learning-panel').innerText()).includes('模拟规则'));
   await page.screenshot({path:path.join(root,'docs/screenshots/product-v9-learning.png'),fullPage:true});

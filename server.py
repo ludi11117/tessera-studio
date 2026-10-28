@@ -90,7 +90,7 @@ def make_handler(store, ai_service=None):
                 if parts==['api','ai','inspire'] and post:
                     self.respond(ai().submit('inspire',body),202);return
                 if parts==['api','health'] and not post:
-                    self.respond({'app':'intent-workbench','version':'product-v10','capabilities':['choice-board-v1','semantic-learning-v1','decision-analysis-v1','compatible-models-v1','configuration-space-v1','guided-intent-v1','preserved-fragments-v1','contextual-inspiration-v1','requirement-trace-v1','semantic-trace-v1'],'storage':str(Path(store.path).resolve().parent),'database':str(Path(store.path).resolve())});return
+                    self.respond({'app':'intent-workbench','version':'product-v10','capabilities':['choice-board-v1','semantic-learning-v1','decision-analysis-v1','compatible-models-v1','configuration-space-v1','guided-intent-v1','preserved-fragments-v1','contextual-inspiration-v1','requirement-trace-v1','semantic-trace-v1','local-revision-v1'],'storage':str(Path(store.path).resolve().parent),'database':str(Path(store.path).resolve())});return
                 if len(parts)==3 and parts[:2]==['api','files'] and not post:
                     name=unquote(parts[2]);folder=(Path(store.path).resolve().parent/'exports').resolve();file=(folder/name).resolve()
                     if file.parent!=folder or file.suffix not in ('.md','.txt','.zip') or not file.is_file():self.respond({'error':'交付文件不存在'},404);return
@@ -121,7 +121,7 @@ def make_handler(store, ai_service=None):
                     if len(parts)==5 and parts[4]=='retry' and post:self.respond(ai().retry(jid,body),202);return
                 if len(parts)==5 and parts[:2]==["api","sessions"] and parts[3]=="ai":
                     sid,operation=parts[2],parts[4]
-                    if operation in ('revise','repair') and post:self.respond(ai().submit(operation,body,sid),202);return
+                    if operation in ('revise','repair','local_revise') and post:self.respond(ai().submit(operation,body,sid),202);return
                     if operation=="export" and post:self.respond(ai().export(sid,body.get("revision"),body.get("format","md")));return
                     if operation=="history" and not post:self.respond({"jobs":ai().jobs(sid)});return
                     if operation=='materials':self.respond(ai().update_materials(sid,body) if post else ai().materials(sid));return
@@ -179,7 +179,7 @@ def make_handler(store, ai_service=None):
                     file=(ROOT/'static'/'assets'/unquote(parts[1])).resolve()
                     if file.parent!=(ROOT/'static'/'assets').resolve() or file.suffix not in ('.woff2','.ttf','.js','.css') or not file.is_file():self.respond({'error':'资源不存在'},404);return
                     self.respond(file.read_bytes(),mime=mimetypes.guess_type(file.name)[0] or 'application/octet-stream');return
-                if not post and parts in ([""], ["index.html"], ["workbench"], ["studio.html"], ["studio.js"], ["choices.js"], ["learning.js"], ["decision.js"], ["configuration.js"], ["canvas.js"], ["canvas.css"], ["journey.js"], ["journey.css"], ["context-trace.js"], ["context-trace.css"], ["connections.js"], ["studio.css"], ["design.css"], ["refined.css"], ["icons.js"], ["app.js"], ["style.css"], ["favicon.svg"]):
+                if not post and parts in ([""], ["index.html"], ["workbench"], ["studio.html"], ["studio.js"], ["choices.js"], ["learning.js"], ["decision.js"], ["configuration.js"], ["canvas.js"], ["canvas.css"], ["journey.js"], ["journey.css"], ["context-trace.js"], ["context-trace.css"], ["focused.js"], ["focused.css"], ["connections.js"], ["studio.css"], ["design.css"], ["refined.css"], ["icons.js"], ["app.js"], ["style.css"], ["favicon.svg"]):
                     name = "studio.html" if parts in ([""],["index.html"]) else "index.html" if parts==["workbench"] else parts[0]
                     self.respond((ROOT / "static" / name).read_bytes(), mime=(mimetypes.guess_type(name)[0] or "text/plain") + "; charset=utf-8")
                     return

@@ -10,7 +10,7 @@ const {chromium}=require('D:/CodexWork/cache/branchforge-browser/node_modules/pl
     const before=await (await page.request.get(base+'/api/sessions')).json();
     page.on('pageerror',e=>errors.push(e.message));
     await page.route('**/*',route=>{const u=new URL(route.request().url());if(u.hostname!=='127.0.0.1')return route.abort();return route.continue();});
-    await page.goto(base);await page.waitForSelector('#preview-mode-label');await page.evaluate(()=>document.fonts.ready);
+    await page.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));await page.goto(base);await page.waitForSelector('#preview-mode-label');await page.evaluate(()=>document.fonts.ready);
     await page.screenshot({path:path.join(root,'docs/screenshots/product-v7-preview-home.png'),fullPage:true});
     await page.locator('.sample-sessions summary').click();await page.locator('[data-session]').first().click();
     await page.waitForSelector('.document-section');await page.locator('[data-tab=sources]').first().click();await page.waitForSelector('#acceptance-form');

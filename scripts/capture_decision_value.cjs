@@ -6,7 +6,7 @@ const {chromium}=require('D:/CodexWork/cache/branchforge-browser/node_modules/pl
  try{
   const base='http://127.0.0.1:8765',page=await browser.newPage({viewport:{width:1512,height:1060},reducedMotion:'reduce'}),paid=[],errors=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.method()==='POST'&&/\/(generate|revise|repair|train)$/.test(new URL(r.url()).pathname))paid.push(r.url());});
-  await page.goto(base);await page.waitForSelector('#try-learning-demo:not([hidden])');await page.locator('#try-learning-demo').click();await page.waitForSelector('.learning-version-detail');
+  await page.addInitScript(()=>localStorage.setItem('tessera-workspace-mode','full'));await page.goto(base);await page.waitForSelector('#try-learning-demo:not([hidden])');await page.locator('#try-learning-demo').click();await page.waitForSelector('.learning-version-detail');
   const sid=await page.evaluate(()=>localStorage.getItem('intent-studio-session'));
   const before=await (await fetch(base+'/api/sessions/'+sid)).json();
   await page.locator('.artifact-tabs [data-tab=decision]').click();await page.waitForSelector('[data-preview-minimax]');
