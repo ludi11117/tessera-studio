@@ -1,0 +1,28 @@
+# Private application data and local environments
+/data/
+.venv*/
+__pycache__/
+*.py[cod]
+node_modules/
+test-results/
+.env
+.env.*
+*.sqlite*
+*.db
+*.log
+*.pem
+*.key
+
+# Local histories, generated outputs and machine-specific evidence
+/experiments/
+/docs/*
+!/docs/ARCHITECTURE.md
+!/docs/FOUR_STEP_EXPERIENCE.md
+!/docs/CONTEXT_AND_TRACE.md
+!/docs/CONFIGURATION_CANVAS.md
+!/docs/DECISION_VALUE.md
+!/docs/DEEP_LEARNING.md
+!/docs/GITHUB_REFERENCES.md
+/NEXT_HANDOFF.md
+/HANDOFF.md
+/CONTINUE_HERE.md

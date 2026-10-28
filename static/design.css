@@ -1,0 +1,8 @@
+@import url("/assets/fonts.css");
+/* Locally hosted typefaces; one accent across both workspaces. */
+@font-face{font-family:"Space Grotesk";src:url('/assets/SpaceGrotesk.ttf') format('truetype');font-weight:300 700;font-display:swap}
+:root{--radius:16px;--accent:#30343B;--green:var(--accent);--ink:#1D1D1F;--dark:var(--ink);--muted:#6E6E73;--line:#E3E5E9;--border:var(--line);--paper:#F6F7F9;--soft:#ECEEF2;--white:#FFFFFF;font-family:"Space Grotesk","Intent Sans SC",sans-serif;background:var(--paper);color:var(--ink);font-synthesis:none}
+body,button,input,textarea,select{font-family:"Space Grotesk","Intent Sans SC",sans-serif}
+h1,h2,h3,h4,.studio-brand,.brand{font-family:"Space Grotesk","Intent Sans SC",sans-serif;letter-spacing:-.04em;font-weight:400}
+.lucide{display:inline-block;width:16px;height:16px;vertical-align:-3px;flex-shrink:0;stroke-width:1.6;margin:0 2px;pointer-events:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}

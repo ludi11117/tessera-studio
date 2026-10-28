@@ -1,0 +1,27 @@
+{
+  "title": "社团读书会招募通知（导入示例）",
+  "brief": "组合一份适合发在社团群的活动通知。请把事实替换为自己的真实任务。",
+  "facts": {
+    "event": "周末读书会",
+    "topic": "如何做读书笔记",
+    "date": "本周日下午3点",
+    "place": "图书馆一楼讨论区"
+  },
+  "blocks": [
+    {"id": "intro", "title": "活动介绍", "variants": [
+      {"id": "intro-0", "template": "欢迎参加{{event}}，这次一起聊聊“{{topic}}”。"},
+      {"id": "intro-1", "template": "读完书却不知道怎样留下收获？来{{event}}，一起交流“{{topic}}”。"},
+      {"id": "intro-2", "template": "{{event}}即将举行，本次讨论主题为“{{topic}}”，欢迎感兴趣的同学参与。"}
+    ]},
+    {"id": "schedule", "title": "时间地点", "variants": [
+      {"id": "schedule-0", "template": "时间：{{date}}。地点：{{place}}。"},
+      {"id": "schedule-1", "template": "我们{{date}}在{{place}}见。"},
+      {"id": "schedule-2", "template": "活动安排在{{date}}，于{{place}}进行。"}
+    ]},
+    {"id": "closing", "title": "参与方式", "variants": [
+      {"id": "closing-0", "template": "想参加的同学请在群里回复，也欢迎带上最近正在读的书。"},
+      {"id": "closing-1", "template": "如果你也想一起聊聊，在群里说一声就好。带上最近在读的书，我们现场交换想法。"},
+      {"id": "closing-2", "template": "有意参与的同学请在群内回复确认，并可携带近期阅读的书籍用于交流。"}
+    ]}
+  ]
+}

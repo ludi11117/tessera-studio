@@ -1,0 +1,22 @@
+{
+  "SourceHanSansSC.woff2": {
+    "source": "https://raw.githubusercontent.com/adobe-fonts/source-han-sans/release/OTF/SimplifiedChinese/SourceHanSansSC-Regular.otf",
+    "bytes": 11542984,
+    "sha256": "96307b3cb4fd63b6c2d5adac405ef9d54414e0105e4807379191fcee8fe65064"
+  },
+  "SourceHanSerifSC.woff2": {
+    "source": "https://raw.githubusercontent.com/adobe-fonts/source-han-serif/release/OTF/SimplifiedChinese/SourceHanSerifSC-SemiBold.otf",
+    "bytes": 17117344,
+    "sha256": "4978a25e2904b07e41dcda4843b80a9536883e2e5980042fddb5c1fe9e1c8200"
+  },
+  "SpaceGrotesk.ttf": {
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/spacegrotesk/SpaceGrotesk%5Bwght%5D.ttf",
+    "bytes": 136676,
+    "sha256": "acad6de1fc93436f5c0f1f4137751ef04f1aea3063e7036535970ffcfbd79f72"
+  },
+  "lucide.min.js": {
+    "source": "https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js",
+    "bytes": 357796,
+    "sha256": "3411692820cb8d47543f69496aa25fd603a358f4498046f41c508a5a3342210e"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "experiment_id": "finite-preference-benchmark-v1",
+  "development_seeds": [3, 7],
+  "evaluation_seeds": [101, 211, 307, 401, 503, 601, 701, 809],
+  "budgets": [0, 2, 4, 8, 16, 32],
+  "l2_sum": 0.5,
+  "pool_limit": 12,
+  "planning_limit_ms": 2000,
+  "heldout_modulus": 5,
+  "scenarios": [
+    {"id": "additive", "interaction": 0.0, "noise": 0.0},
+    {"id": "weak_interaction", "interaction": 0.3, "noise": 0.0},
+    {"id": "strong_interaction", "interaction": 1.5, "noise": 0.0},
+    {"id": "noisy_interaction", "interaction": 1.5, "noise": 0.25},
+    {"id": "cost_misspecified", "interaction": 1.5, "noise": 0.0, "cost_misspecified": true},
+    {"id": "locked", "interaction": 1.5, "noise": 0.0, "lock_first": true},
+    {"id": "infeasible", "interaction": 1.5, "noise": 0.0, "max_chars": 1}
+  ],
+  "arms": [
+    {"id": "legacy_current", "model": "legacy", "policy": "uncertainty", "context_mode": "current"},
+    {"id": "additive_uncertainty", "model": "additive", "policy": "uncertainty", "context_mode": "mixed"},
+    {"id": "interaction_uncertainty", "model": "interaction", "policy": "uncertainty", "context_mode": "mixed"},
+    {"id": "interaction_random", "model": "interaction", "policy": "random", "context_mode": "mixed"},
+    {"id": "interaction_kg", "model": "interaction", "policy": "kg", "context_mode": "mixed"},
+    {"id": "interaction_cost_kg", "model": "interaction", "policy": "cost_kg", "context_mode": "mixed"},
+    {"id": "interaction_current", "model": "interaction", "policy": "uncertainty", "context_mode": "current"}
+  ]
+}

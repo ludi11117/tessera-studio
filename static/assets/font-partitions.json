@@ -1,0 +1,245 @@
+{
+  "source_sha256": "f1d8611151880c6c336aabeac4640ef434fa13cbfbf1ffe82d0a71b2a5637256",
+  "original_unicode_count": 44853,
+  "partitions": [
+    {
+      "file": "IntentSans-common.woff2",
+      "unicode_count": 5366,
+      "bytes": 1451324,
+      "sha256": "080ac3d3923341b8c82cfc49b1e9cdd3717528f8d48f617cb944ec7aa39cf1d4",
+      "sample_unicode": 32
+    },
+    {
+      "file": "IntentSans-0.woff2",
+      "unicode_count": 66,
+      "bytes": 6496,
+      "sha256": "1a82dbeb50622bd0f52b55766b6397bbc77f1cadb59cecc3672e947034c54d9d",
+      "sample_unicode": 1025
+    },
+    {
+      "file": "IntentSans-1000.woff2",
+      "unicode_count": 348,
+      "bytes": 148520,
+      "sha256": "5162a66bbc44e4371b8af73b5a4ef8586350c1adbb2a53c3a837efc3e407f632",
+      "sample_unicode": 4352
+    },
+    {
+      "file": "IntentSans-3000.woff2",
+      "unicode_count": 4011,
+      "bytes": 915916,
+      "sha256": "c3bf067d15ceb69e9e4734bdce807793cd8f5ee9f584b159f8b0123dd7adcd34",
+      "sample_unicode": 12353
+    },
+    {
+      "file": "IntentSans-4000.woff2",
+      "unicode_count": 3834,
+      "bytes": 1032504,
+      "sha256": "8749e0ccb1deae39e953069779be482527cf506c1da9af38c18b7b43e5105de8",
+      "sample_unicode": 16384
+    },
+    {
+      "file": "IntentSans-5000.woff2",
+      "unicode_count": 3168,
+      "bytes": 1155496,
+      "sha256": "ef89d4dd012eb65370ed5b2a4eb3b4b9660ede25656dba8456867ef4c4e47900",
+      "sample_unicode": 20480
+    },
+    {
+      "file": "IntentSans-6000.woff2",
+      "unicode_count": 3204,
+      "bytes": 1186808,
+      "sha256": "050e6db2d01dcc0758ebecdab87b68b7e11ecec61084a180c2833ffc7a93a8d5",
+      "sample_unicode": 24579
+    },
+    {
+      "file": "IntentSans-7000.woff2",
+      "unicode_count": 3444,
+      "bytes": 1462712,
+      "sha256": "d15e4ddd774ce1bbfa42ed7595234de880cb875dd07465dd1769fd2575a5707b",
+      "sample_unicode": 28672
+    },
+    {
+      "file": "IntentSans-8000.woff2",
+      "unicode_count": 3444,
+      "bytes": 1483736,
+      "sha256": "63a0ff2683905b0a38e2f6be1975d6e4fb6199a83528fe102dffea7b9a871ebd",
+      "sample_unicode": 32770
+    },
+    {
+      "file": "IntentSans-9000.woff2",
+      "unicode_count": 3662,
+      "bytes": 1674156,
+      "sha256": "5d973a0ab8018fa8267c37bf92cd7ca5b2f7b19445bdc23be8deae37c7806867",
+      "sample_unicode": 36868
+    },
+    {
+      "file": "IntentSans-a000.woff2",
+      "unicode_count": 1053,
+      "bytes": 101320,
+      "sha256": "6090accf55dd7d05951dbf670e1c5d20cd3d01c7c285e29a8d33bfe84d7c89b0",
+      "sample_unicode": 43360
+    },
+    {
+      "file": "IntentSans-b000.woff2",
+      "unicode_count": 4096,
+      "bytes": 362496,
+      "sha256": "d2166a7b780cc4d3a6ec3e1eea6c66a556465fa75fb52499317b7738438611f1",
+      "sample_unicode": 45056
+    },
+    {
+      "file": "IntentSans-c000.woff2",
+      "unicode_count": 4096,
+      "bytes": 368920,
+      "sha256": "29b2e885dfdb071b32f7f42813a076ceef24169f36dedd19bd8661b52ba9d976",
+      "sample_unicode": 49152
+    },
+    {
+      "file": "IntentSans-d000.woff2",
+      "unicode_count": 2028,
+      "bytes": 217116,
+      "sha256": "804c046bd7e2dd9bc2a1757a115ce2d7421814d8e827fcb3991e62b90cf036ec",
+      "sample_unicode": 53248
+    },
+    {
+      "file": "IntentSans-f000.woff2",
+      "unicode_count": 439,
+      "bytes": 113360,
+      "sha256": "a0491ba9d22ebae774627b1077b70f0cebfc9efd686368b03e8d720b6a8a31a9",
+      "sample_unicode": 63744
+    },
+    {
+      "file": "IntentSans-1f000.woff2",
+      "unicode_count": 225,
+      "bytes": 29956,
+      "sha256": "ddeda4f04418940477a561168e382de869b27054600889153534d9335f1f6d54",
+      "sample_unicode": 127232
+    },
+    {
+      "file": "IntentSans-20000.woff2",
+      "unicode_count": 267,
+      "bytes": 57944,
+      "sha256": "740a39352cdf910c3ac18c9282cfcc8d9b4f29a9a5d49fcbd58ea2e74bb1a81e",
+      "sample_unicode": 131083
+    },
+    {
+      "file": "IntentSans-21000.woff2",
+      "unicode_count": 267,
+      "bytes": 74900,
+      "sha256": "c8701f18bce92b33fbd7563ea660d355ee653e735223c5011ca37c8258787915",
+      "sample_unicode": 135188
+    },
+    {
+      "file": "IntentSans-22000.woff2",
+      "unicode_count": 145,
+      "bytes": 40772,
+      "sha256": "1ec9e520c18620d4b648f63eb2236066bc5087fbde056db0c7fcc44d3356bf79",
+      "sample_unicode": 139333
+    },
+    {
+      "file": "IntentSans-23000.woff2",
+      "unicode_count": 229,
+      "bytes": 60856,
+      "sha256": "40a805be10bc49279384ce5dca156bba0ab987eff64e740569c1876de820c9e9",
+      "sample_unicode": 143411
+    },
+    {
+      "file": "IntentSans-24000.woff2",
+      "unicode_count": 275,
+      "bytes": 77832,
+      "sha256": "93cc27c5596b673703bebf6c29b6f49b3da1c63dd546205e81326b48fde6458b",
+      "sample_unicode": 147473
+    },
+    {
+      "file": "IntentSans-25000.woff2",
+      "unicode_count": 161,
+      "bytes": 45884,
+      "sha256": "3aca5f99519a4dd0871b42738105b4575313297287c8c5b82201bea1fa6635f6",
+      "sample_unicode": 151596
+    },
+    {
+      "file": "IntentSans-26000.woff2",
+      "unicode_count": 210,
+      "bytes": 59388,
+      "sha256": "857e1136328cb35990c56a7f2a252b38b9a595ad0fc1a7a46ec42ef7997ed709",
+      "sample_unicode": 155660
+    },
+    {
+      "file": "IntentSans-27000.woff2",
+      "unicode_count": 142,
+      "bytes": 45164,
+      "sha256": "c4a96941f32d822ef7838f327cdb2e01e2dc0c1e14c9c2511a0135a3b8a7db04",
+      "sample_unicode": 159758
+    },
+    {
+      "file": "IntentSans-28000.woff2",
+      "unicode_count": 242,
+      "bytes": 75496,
+      "sha256": "e750a34445c81eeb1afbeaacc8b779b980ab6f4c90a19030c0cd5162989c2ed1",
+      "sample_unicode": 163842
+    },
+    {
+      "file": "IntentSans-29000.woff2",
+      "unicode_count": 113,
+      "bytes": 37948,
+      "sha256": "e5dcd7ddb7db072536909dbe9969af5d8e06221da66bf2cbadedf0d3e30ca4e1",
+      "sample_unicode": 168057
+    },
+    {
+      "file": "IntentSans-2a000.woff2",
+      "unicode_count": 68,
+      "bytes": 26188,
+      "sha256": "cf562f7d9385ce155501e183908c01044d2c7c672c7940913dd96837fbe71e14",
+      "sample_unicode": 172052
+    },
+    {
+      "file": "IntentSans-2b000.woff2",
+      "unicode_count": 84,
+      "bytes": 23336,
+      "sha256": "e889a0248a258ae0201dde32cb34c70d050032d04ba4cacdb242e523077227d7",
+      "sample_unicode": 176423
+    },
+    {
+      "file": "IntentSans-2c000.woff2",
+      "unicode_count": 101,
+      "bytes": 27372,
+      "sha256": "9ed15af4bafdbc58c093c599ba5c31b345573dc1038a6ae2b3e45321fe32ebd0",
+      "sample_unicode": 180265
+    },
+    {
+      "file": "IntentSans-2d000.woff2",
+      "unicode_count": 2,
+      "bytes": 1276,
+      "sha256": "2cc2085aff815c9615cc44a2814e11e75bbc808394b7fc38d3f5417feb02e124",
+      "sample_unicode": 184925
+    },
+    {
+      "file": "IntentSans-2e000.woff2",
+      "unicode_count": 4,
+      "bytes": 1976,
+      "sha256": "fdb4c01657007ec8f0914876bbc57956939b1cf6b182d732a3184d2ba2724652",
+      "sample_unicode": 188436
+    },
+    {
+      "file": "IntentSans-2f000.woff2",
+      "unicode_count": 55,
+      "bytes": 16112,
+      "sha256": "571bd84f5b678239cc5e2ff8561872b81c3c74428ff816852b66dbb5ef1f0bd3",
+      "sample_unicode": 194564
+    },
+    {
+      "file": "IntentSans-30000.woff2",
+      "unicode_count": 3,
+      "bytes": 4440,
+      "sha256": "b06c518519f844ddb193a3d04af342392c40b7162932c6aa77f5d85b1ddb2768",
+      "sample_unicode": 198441
+    },
+    {
+      "file": "IntentSans-31000.woff2",
+      "unicode_count": 1,
+      "bytes": 3520,
+      "sha256": "651a6405dc7fbc4fcd4fa0db1cceeb42f44fdf4f4b3535e1dd37886278481d13",
+      "sample_unicode": 200812
+    }
+  ],
+  "partitioned_unicode_count": 44853
+}
