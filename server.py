@@ -241,6 +241,10 @@ def make_handler(store, ai_service=None, metrics=None, log_level="normal", allow
     def preview_website(ctx, pid):
         return Response(websites().preview(pid, ctx.body()))
 
+    @router.post("/api/websites/<pid>/preference")
+    def preference_website(ctx, pid):
+        return Response(websites().preference(pid, ctx.body()))
+
     @router.post("/api/websites/<pid>/action")
     def action_website(ctx, pid):
         body = ctx.body()

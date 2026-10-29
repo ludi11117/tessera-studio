@@ -56,6 +56,9 @@ class WebStore:
             if kind=='patch':
                 doc,changes=model.patch(before['document'],body.get('patches'),before['locks']);after['document']=doc;after['reviewed']=None;proof=model.receipt(before['document'],doc,changes)
                 if body.get('job_id'):proof['job_id']=body['job_id']
+            elif kind=='compare':
+                from webcraft.preference import feedback
+                proof=feedback(after,body)
             elif kind=='protect':
                 cid,field=body.get('component'),body.get('field');enabled=body.get('enabled')
                 if cid not in model.IDS or field not in ('layout','palette','content') or type(enabled) is not bool:raise Invalid('保留范围无效')
@@ -77,12 +80,25 @@ class WebStore:
             db.execute('UPDATE pages SET state=?,revision=? WHERE id=?',(encode(after),rev,pid))
             db.execute('INSERT INTO history(page,revision,kind,before_state,after_state,evidence,created) VALUES(?,?,?,?,?,?,?)',(pid,rev,kind,encode(before),encode(after),encode(proof),now()))
         return self.view(pid)
+    def preference(self,pid,body):
+        from webcraft.preference import analyze,patches
+        with closing(self.connect()) as db:state=self.checked(db,pid,body.get('revision'))
+        result=analyze(state);result['revision']=body['revision']
+        if result['query']:
+            for side in ('a','b'):
+                doc=copy.deepcopy(state['document'])
+                for p in patches(doc,result['query'][side]):doc['components'][p['component']][p['field']]=p['value']
+                result['query'][side+'_html']=render(doc,True)
+        return result
     def export(self,pid,body):
         with closing(self.connect()) as db:
             db.execute('BEGIN');state=self.checked(db,pid,body.get('revision'));events=[dict(r) for r in db.execute('SELECT revision,kind,evidence,created FROM history WHERE page=? ORDER BY seq',(pid,))]
         if state['reviewed']!=model.digest(state['document']):raise Invalid('请先核对当前网页并确认交付')
         content=render(state['document']);output=io.BytesIO()
         proof={**evidence(state['document']),'revision':body['revision'],'human_confirmed_hash':state['reviewed'],'protected_properties':state['locks'],'events':events}
+        from webcraft.preference import analyze
+        proof['preference']=analyze(state)
+        proof['explicit_comparisons']=state.get('preferences',[])
         with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED) as z:
             for name,text in [('index.html',content),('project.json',encode(state['document'])),('evidence.json',encode(proof)),('README.txt','双击 index.html 可离线打开，无构建步骤或外部依赖。\nproject.json 为结构化源文件；evidence.json 为当前版本校验记录。\n静态展示页不含表单后端、网站托管或自动事实核验。')]:z.writestr(name,text)
         return output.getvalue()
