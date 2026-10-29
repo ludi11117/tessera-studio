@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f2ee">
+<title>拾构 · 直接对话</title>
+<meta name="description" content="不用选类型，不用回答问题，也不用研究提示词。说一句你要什么，直接拿到可用成稿；不满意就接着说。">
+<link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="/chat.css">
+<script src="/chat.js" defer></script>
+</head>
+<body>
+<div class="ambient" aria-hidden="true"></div>
+<header class="chrome">
+  <a class="brand" href="/studio" aria-label="回到拾构工作室"><span class="brand-mark">t.</span><span class="brand-word">拾构</span><span class="brand-mode">直接对话</span></a>
+  <p class="chrome-note">不选类型 · 不答问题 · 说一句就做</p>
+  <div class="chrome-actions">
+    <button id="new-chat" class="chrome-link" type="button">新对话</button>
+    <a class="chrome-link chrome-studio" href="/studio">工作室 <span aria-hidden="true">↗</span></a>
+  </div>
+</header>
+
+<main class="chat" id="chat">
+  <section class="thread" id="thread" aria-live="polite">
+    <div class="empty" id="empty">
+      <p class="kicker"><span class="live-dot"></span>TESSERA / DIRECT</p>
+      <h1>直接说，<em>直接做</em>。</h1>
+      <p class="empty-lead">不用选类型，不用回答问题，也不用研究提示词。<br>一句话说清你要什么，直接给可用版本；不满意就接着说。</p>
+      <div class="chips" id="chips" aria-label="示例说法">
+        <button type="button" data-prompt="帮我写一封给导师的邮件：介绍我在做的项目，并约一次15分钟的交流。">写一封给导师的邮件</button>
+        <button type="button" data-prompt="帮我准备一段面试用的自我介绍：我是药学专业大三学生，做过一个校园项目，想突出动手和协作。">准备一段面试自我介绍</button>
+        <button type="button" data-prompt="帮我排一份两周的期末复习计划：数据结构，每天能投入90分钟，图与动态规划最薄弱。">排一份两周复习计划</button>
+        <button type="button" data-prompt="帮我安排一次三天两夜的城市旅行：两个人，预算3000元，想慢一点、少赶路。">安排一次三天旅行</button>
+        <button type="button" data-prompt="帮我写一条小红书笔记：分享我整理桌面线材的三个方法，语气真实，不要太像广告。">写一条平台内容</button>
+        <button type="button" data-prompt="帮我分析要不要报一个3.5万元、一学期的交换项目：我关心学分、语言提升和实习机会的取舍。">分析一个决定</button>
+      </div>
+      <p class="empty-foot">生成与修改都保存在本地任务里；事实、用途与验收仍需你核对。</p>
+    </div>
+    <div class="messages" id="messages"></div>
+  </section>
+
+  <form class="composer" id="composer">
+    <div class="composer-box">
+      <label class="sr-only" for="input">描述你要的成果，或告诉 AI 怎样修改</label>
+      <textarea id="input" rows="1" maxlength="6000" placeholder="直接说你要什么，例如：帮我准备一段面试自我介绍，我的专业是药学……"></textarea>
+      <button id="send" class="send" type="submit" aria-label="发送"><span aria-hidden="true">↑</span></button>
+    </div>
+    <p class="composer-note"><span id="status">Enter 发送 · Shift+Enter 换行</span><span>生成时，目标会发送至你配置的模型接口</span></p>
+  </form>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

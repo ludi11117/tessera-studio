@@ -1,0 +1,24 @@
+{
+  "compiler": "tessera-page-v1",
+  "document_hash": "9ef8c50c4cedb3cf705754d0fb3a4efb6a345ff9cae2fed05e9f989e22218e54",
+  "html_sha256": "e2f3d5d3b63297b3aa50b6456853172c62144be364c83b82bbe9049c991b7415",
+  "script_free": true,
+  "external_assets": 0,
+  "component_ids": [
+    "nav",
+    "hero",
+    "projects",
+    "contact"
+  ],
+  "checks": [
+    "closed_schema",
+    "escaped_text",
+    "allowed_contact_url",
+    "four_components",
+    "one_to_six_projects"
+  ],
+  "limits": [
+    "Checks do not establish factual truth or user satisfaction.",
+    "Property preservation does not promise pixel-identical geometry when content length changes."
+  ]
+}

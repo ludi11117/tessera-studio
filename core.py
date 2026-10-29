@@ -140,6 +140,8 @@ def comparison(task, state, weights, seen):
         bid = b["id"]
         if bid in state["locks"]:
             continue
+        if len({v["template"] for v in b["variants"]}) < 2:
+            continue
         for va, vb in itertools.combinations(b["variants"], 2):
             a, z = copy.deepcopy(state["combo"]), copy.deepcopy(state["combo"])
             a[bid], z[bid] = va["id"], vb["id"]

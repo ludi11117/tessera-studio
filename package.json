@@ -1,0 +1,6 @@
+{
+  "name": "tessera-studio",
+  "private": true,
+  "scripts": {"test:web": "node tests/studio-webcraft.cjs"},
+  "devDependencies": {"playwright": "1.63.0"}
+}

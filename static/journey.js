@@ -14,6 +14,9 @@ async function openGuide(){
   S.guideStage='idea';renderGuide();$('#guidance-dialog').showModal();
 }
 function suggestGuideCategory(goal){
+  if(/简历|面试|求职|自我介绍|投递|招聘|职业规划|内推/.test(goal))return 'career';
+  if(/旅行|行程|出游|聚会|活动|婚礼|搬家|日程|生活安排|三天两夜/.test(goal))return 'life';
+  if(/小红书|公众号|视频|口播|脚本|帖子|推文|社交平台|内容创作|标题/.test(goal))return 'content';
   if(/复习|学习|练习|备考|课程/.test(goal))return 'study';
   if(/邮件|邀请|文章|文案|写作|介绍信|发言/.test(goal))return 'writing';
   if(/对比|比较|分析|决策|选哪个/.test(goal))return 'analysis';
@@ -29,7 +32,7 @@ function readGuideIdea(){
 function renderGuide(){
   const g=S.guidance,stage=S.guideStage,category=guideCategory(),question=category.questions.find(q=>q.id===S.guideQuestion)||nextGuideQuestion();
   let body='';
-  if(stage==='idea')body=`<p>不用组织成完整的提示词。说说想做什么，接下来用具体选择一起补齐。</p><label>我大概想做…<textarea id="guide-idea" rows="3" maxlength="6000" placeholder="例如：写封邀请邮件 / 安排复习 / 梳理一个小项目">${esc(g.goal||$('#goal-input').value)}</textarea></label><fieldset class="guide-category"><legend>这次先做哪类成果？</legend>${Object.entries(S.guideCatalog.catalog).map(([k,v])=>`<button type="button" data-guide-category="${k}" aria-pressed="${g.category===k}">${esc(v.name)}</button>`).join('')}</fieldset><p class="field-note">当前支持文本成果与项目方案；可运行网站与网页组件编辑尚未接入。选择适合这次成果的引导，不需要提供参考设计。</p><button type="button" class="button-primary" data-guide-begin>一起找方向 ↗</button>`;
+  if(stage==='idea')body=`<p>不用组织成完整的提示词。说说想做什么，接下来用具体选择一起补齐。</p><label>我大概想做…<textarea id="guide-idea" rows="3" maxlength="6000" placeholder="例如：写封邀请邮件 / 安排复习 / 准备面试 / 做三天旅行计划 / 写一条小红书">${esc(g.goal||$('#goal-input').value)}</textarea></label><fieldset class="guide-category"><legend>这次先做哪类成果？</legend>${Object.entries(S.guideCatalog.catalog).map(([k,v])=>`<button type="button" data-guide-category="${k}" aria-pressed="${g.category===k}">${esc(v.name)}</button>`).join('')}</fieldset><p class="field-note">求职、生活安排、内容创作、写作沟通、学习、项目和分析都可以从一句话开始。这里先帮你问清关键选择，不需要写提示词；网页可另开 <a href="/web-studio">网页工作室 ↗</a>。</p><button type="button" class="button-primary" data-guide-begin>一起找方向 ↗</button>`;
   else if(stage==='questions'&&question){
     S.guideQuestion=question.id;const answered=Object.values(g.answers).filter(Boolean).length;
     body=`<div class="guide-progress">${esc(category.name)} · 已明确 ${answered} 项 / ${category.questions.length} 项</div><h3>${esc(question.title)}</h3><p>选一个接近的，或者用自己的话说。暂时不知道也能继续。</p>${question.examples?`${contextualGuideHTML()}<details class="guide-common"><summary>也可以看通用示意</summary><div class="guide-examples">${question.examples.map((ex,i)=>`<button type="button" data-guide-example="${i}" aria-pressed="${g.answers[question.id]===ex.value}"><span class="small-kicker">表达 / 过程示意</span><b>${esc(ex.name)}</b><p>${esc(ex.text)}</p><small>按这个方向探索 ↗</small></button>`).join('')}</div><p class="field-note">这些是本地示意，不是模型为本任务生成的成品。选择只表示这次探索方向，不作为训练标签。</p></details>`:''}<div class="guide-options">${(question.options||[]).map((v,i)=>`<button type="button" data-guide-option="${i}" aria-pressed="${g.answers[question.id]===v}">${esc(v)}</button>`).join('')}</div><label>也可以自己说<input id="guide-answer" maxlength="500" value="${esc(g.answers[question.id]||'')}" placeholder="一句话即可"></label><div class="guide-actions"><button class="button-primary" type="button" data-guide-answer>记下并继续</button><button class="button-quiet" type="button" data-guide-skip>还不知道，先往下看</button><button class="button-quiet" type="button" data-guide-summary>先看需求卡</button></div><div class="guide-question-nav">${category.questions.map(q=>`<button type="button" data-guide-question="${q.id}" aria-pressed="${q.id===question.id}">${g.answers[q.id]?'✓ ':Object.hasOwn(g.answers,q.id)?'待确认 · ':''}${esc(q.title)}</button>`).join('')}</div>`;
@@ -42,7 +45,7 @@ function renderGuide(){
 function renderGuidanceSummary(){refreshFocused();
   const host=$('#guidance-summary');if(!host)return;const g=S.guidance;
   if(!g){host.hidden=true;return;}host.hidden=false;
-  const stale=g.goal!==$('#goal-input').value.trim()||(S.taskType!=='auto'&&S.taskType!==g.category);
+  const base=S.guideCatalog?.catalog?.[g.category]?.base||g.category,stale=g.goal!==$('#goal-input').value.trim()||(S.taskType!=='auto'&&S.taskType!==base);
   host.innerHTML=`<div><b>${stale?'想法已变化，需要更新需求卡':g.confirmed?'需求卡已确认':'需求卡整理中'}</b><p>${esc(g.goal)} · ${Object.values(g.answers).filter(Boolean).length} 项已明确，${4-Object.values(g.answers).filter(Boolean).length} 项待确认</p></div><button type="button" class="button-quiet" data-guide-open>继续整理</button><button type="button" class="button-quiet" data-guide-remove>移除需求卡</button>`;
 }
 function requirementCardHTML(){
@@ -63,8 +66,8 @@ function openPreserve(block){
   $('#fragment-dialog').showModal();
 }
 function mountJourney(){
-  $('.home-heading').insertAdjacentHTML('beforeend',journeyHTML(true));
-  $('#goal-input').insertAdjacentHTML('beforebegin','<div class="guide-entry"><span>只有一个模糊想法也可以。</span><button type="button" class="button-quiet" data-guide-open>一起找点灵感 ↗</button></div><div id="guidance-summary" class="guidance-summary" hidden></div>');
+  $('.home-heading').insertAdjacentHTML('beforeend','<p class="journey-lead">或者，从一句想法开始</p>'+journeyHTML(true));
+  $('#goal-input').insertAdjacentHTML('beforebegin','<div class="guide-entry"><span>不想想提示词？回答几个具体问题就行。</span><button type="button" class="button-quiet" data-guide-open>陪我理清 ↗</button></div><div id="guidance-summary" class="guidance-summary" hidden></div>');
   document.body.insertAdjacentHTML('beforeend','<dialog id="guidance-dialog" class="studio-dialog guidance-dialog"><div class="dialog-heading"><div><span class="small-kicker">说想法 · 看例子 · 确认需求</span><h2>让想法，慢慢有形。</h2></div><button type="button" class="button-quiet" data-close="guidance-dialog">稍后继续 ✕</button></div><div id="guidance-content"></div><p class="field-note">整理输入与本地示意不调用模型；点击模型探索才发送相关内容。确认需求卡后，再另行生成成果。</p></dialog><dialog id="fragment-dialog" class="studio-dialog"><form id="fragment-form"><div class="dialog-heading"><h2 id="fragment-title">保留局部原文</h2><button type="button" class="button-quiet" data-close="fragment-dialog">关闭 ✕</button></div><p>只保留喜欢的一小段，这一章的其他内容仍可修改。可先在成品中选中文字，再点“保留局部”。</p><label>要原样保留的连续文字<textarea id="fragment-text" rows="3" maxlength="500" required></textarea></label><details><summary>查看本章原文</summary><pre id="fragment-original" class="draft-content"></pre></details><p class="field-note">逐字检查，不代表事实已核实。保留文字仍可移动到本章其他位置；不能移到别章代替。局部保留不作为训练标签。</p><div class="dialog-actions"><button type="submit" class="button-primary">保留这段，其余可改</button></div></form></dialog>');
 }
 document.addEventListener('input',e=>{
@@ -90,7 +93,8 @@ document.addEventListener('click',e=>{
   else if(b.hasAttribute('data-guide-confirm'))run(async()=>{
     const g=S.guidance;if(g.goal.trim().length<2)throw new Error('请先简单描述想做什么');
     g.goal=g.goal.trim();$('#goal-input').value=g.goal;
-    if(S.taskType!==g.category){changeChoiceTaskType(g.category);document.querySelectorAll('[data-type]').forEach(el=>el.classList.toggle('active',el.dataset.type===g.category));}
+    const base=guideCategory().base||g.category;
+    if(S.taskType!==base){changeChoiceTaskType(base);document.querySelectorAll('[data-type]').forEach(el=>el.classList.toggle('active',el.dataset.type===base));}
     if(g.inspiration){const preview=await api('/api/guidance/preview',{guidance:g,materials:S.materials});g.inspiration.confirmed_context_hash=preview.context_hash;}
     g.confirmed=true;renderGuidanceSummary();await saveDraft();$('#guidance-dialog').close();toast('需求卡已保存。点击开始后，模型会按这些明确选择生成。');
   });

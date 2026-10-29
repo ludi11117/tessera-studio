@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c0d10">
+<title>拾构 · 挑一条</title>
+<meta name="description" content="不用写提示词。滚轮翻版本，空格留下，按住 Shift 当场看它拼进你的成稿。">
+<link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="/swipe.css">
+<script src="/swipe.js" defer></script>
+</head>
+<body>
+<div class="ambient" aria-hidden="true"><span class="orb orb-a"></span><span class="orb orb-b"></span><span class="orb orb-c"></span></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="chrome">
+  <a class="brand" href="/studio" aria-label="回到拾构工作室"><span class="brand-mark">t.</span><span class="brand-word">拾构</span><span class="brand-mode">试一条</span></a>
+  <div class="crumbs"><span class="crumbs-mode">TAKE ONE</span><span class="crumbs-line" aria-hidden="true"></span><span id="task-name" class="crumbs-task">挑一条，拼成你的</span></div>
+  <div class="chrome-actions">
+    <button id="undo" class="chrome-btn" type="button" title="撤回上一次留下" disabled>↶</button>
+    <a class="chrome-btn chrome-close" href="/studio" title="回到工作室">✕</a>
+  </div>
+</header>
+
+<main class="app" id="app" data-screen="start">
+  <section class="start" id="start">
+    <div class="start-grid">
+      <div class="intro">
+        <p class="kicker"><span class="live-dot"></span>TESSERA / TAKE ONE</p>
+        <h1>不写提示词，<br><em>挑</em>一条。</h1>
+        <p class="lead">滚轮翻版本，空格留下。<br>按住 Shift，当场看它拼进你的成稿。</p>
+        <div class="start-actions" id="start-actions"></div>
+        <p class="start-foot">留下会写入本地任务记录；只是翻看，不会记成你的偏好。<br>示例内容均为演示数据。</p>
+      </div>
+      <div class="shelf-wrap">
+        <div class="shelf-head"><span>挑一组开始</span><span id="shelf-count" class="shelf-count">读取示例…</span></div>
+        <div class="shelf" id="shelf" aria-label="示例任务"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="compose" id="compose" hidden>
+    <aside class="doc-rail" id="doc-rail" aria-label="正在生长的成稿">
+      <div class="doc-rail-head">
+        <div><p class="kicker">你的成稿</p><p class="doc-rail-title" id="doc-rail-title">正在成形</p></div>
+        <span class="doc-count" id="doc-count">0 / 4</span>
+      </div>
+      <div class="doc-paper">
+        <div class="doc-slots" id="doc-slots"></div>
+      </div>
+      <button id="doc-expand" class="doc-expand" type="button">看完整成稿 <span>↗</span></button>
+      <p class="doc-note">没在这里挑的段落沿用当前组合，灰字标出。</p>
+      <button id="finish-early" class="doc-finish" type="button">就这样，看完成稿 →</button>
+    </aside>
+
+    <section class="stage" id="deck" aria-live="polite" tabindex="-1">
+      <div class="stage-top">
+        <div class="section-meta">
+          <span class="section-index" id="section-index">01</span>
+          <div class="section-name"><p class="kicker" id="section-kicker">第 1 段 · 共 4 段</p><h2 id="section-title">正在读取</h2></div>
+        </div>
+        <div class="take-counter"><span id="take-count">1</span><span class="take-count-total">/ 3</span></div>
+      </div>
+      <div class="paper-wrap">
+        <div class="paper-behind behind-1" aria-hidden="true"></div>
+        <div class="paper-behind behind-2" aria-hidden="true"></div>
+        <article class="paper" id="paper">
+          <span class="paper-tone" id="paper-tone" aria-hidden="true"></span>
+          <div class="paper-meta"><span id="take-style" class="take-style">简洁直接</span><span id="paper-index" class="paper-index">01 / 03</span></div>
+          <div class="take-text" id="take-text"></div>
+          <footer class="paper-foot"><span id="paper-source">来自本任务的第 1 段</span><span class="paper-sig" aria-hidden="true">t.</span></footer>
+        </article>
+      </div>
+      <div class="stage-bottom">
+        <div class="take-dots" id="take-dots" aria-hidden="true"></div>
+        <p class="hint" id="hint"><kbd>↑</kbd><kbd>↓</kbd> 换一条 <span>·</span> <kbd>space</kbd> 留下 <span>·</span> 按住 <kbd>shift</kbd> 试穿</p>
+      </div>
+      <div class="dock">
+        <div class="dock-nav">
+          <button id="prev" class="dock-btn dock-ghost" type="button" aria-label="上一条"><span aria-hidden="true">←</span><small>上一条</small></button>
+          <button id="keep" class="dock-btn dock-keep" type="button"><span class="keep-arrow" aria-hidden="true">↓</span><span>留下这条</span><kbd>space</kbd></button>
+          <button id="next" class="dock-btn dock-ghost" type="button" aria-label="下一条"><small>下一条</small><span aria-hidden="true">→</span></button>
+        </div>
+        <div class="dock-extra">
+          <button id="try" class="try-btn" type="button" aria-pressed="false" title="也可以按住 Shift 临时试穿">试穿整篇 <kbd>shift</kbd></button>
+          <button id="why" class="why-btn" type="button">凭什么？</button>
+          <button id="finish-mobile" class="why-btn dock-finish" type="button">看完成稿</button>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <section class="final" id="final" hidden>
+    <div class="final-bar">
+      <div class="final-heading">
+        <p class="kicker"><span class="live-dot"></span>TESSERA / ASSEMBLED</p>
+        <h1>拼好了。</h1>
+        <p class="final-meta" id="final-meta"></p>
+      </div>
+      <div class="final-actions">
+        <button id="final-copy" class="final-btn" type="button">复制全文</button>
+        <button id="final-back" class="final-btn" type="button">回去再挑</button>
+        <a class="final-btn final-primary" href="/studio">进工作室继续改 <span>↗</span></a>
+      </div>
+    </div>
+    <article class="final-paper" id="final-paper"></article>
+    <p class="final-note">这里只证明组合与你明确留下的选择；事实、用途和验收仍需在工作室核对。</p>
+  </section>
+</main>
+
+<div class="preview" id="preview" hidden>
+  <div class="preview-backdrop" data-preview-close></div>
+  <section class="preview-sheet" role="dialog" aria-modal="true" aria-label="试穿成稿">
+    <header class="preview-head">
+      <div><p class="kicker" id="preview-kicker">试穿 · 还没留下</p><p id="preview-lead">这一条拼进去，整篇会变成这样。</p></div>
+      <button class="preview-close" type="button" data-preview-close>关闭返回 ✕</button>
+    </header>
+    <div class="preview-doc" id="preview-doc"></div>
+    <footer class="preview-foot">按住 Shift 时松开就回来；点开时点关闭返回。两种方式都不会写入记录。</footer>
+  </section>
+</div>
+
+<dialog id="why-dialog" class="why-dialog">
+  <div class="why-head"><div><p class="kicker">这些卡片从哪来</p><h2>不是随机灵感，<br>是同一个任务的不同写法。</h2></div><button type="button" data-close class="why-close">关闭 ✕</button></div>
+  <div id="why-body" class="why-body"></div>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

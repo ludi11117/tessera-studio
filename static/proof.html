@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>工程证据 · Tessera 拾构</title>
+<meta name="description" content="Tessera 的提交协议、快照链、约束求解与精确选区替换，全部在本机实时可验证。">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/design.css">
+<link rel="stylesheet" href="/proof.css">
+</head>
+<body>
+<header class="proof-top">
+  <a class="proof-brand" href="/"><span class="proof-symbol">t.</span><span>拾构<span class="proof-caption">TESSERA / ENGINEERING PROOF</span></span></a>
+  <nav class="proof-nav" aria-label="页面导航">
+    <a href="/">创作工作室 ↗</a>
+    <a href="/workbench">段落工作台 ↗</a>
+    <a href="/experiments/content/report.html" target="_blank" rel="noopener">偏好实验报告 ↗</a>
+  </nav>
+</header>
+
+<main class="proof-main">
+  <section class="proof-hero">
+    <p class="proof-kicker"><span class="proof-dot" aria-hidden="true"></span>LOCAL / LIVE / ISOLATED</p>
+    <h1>模型只负责写候选。<br>提交、约束与交付，由可验证的程序控制。</h1>
+    <p class="proof-lead">这不是一个把提示词包了一层的聊天页。下面的数字、检查和每一次 409，都由当前运行的服务实时计算。页面不会调用任何付费模型。</p>
+    <ul class="proof-tags" aria-label="能力标签">
+      <li>revision CAS</li><li>快照链</li><li>有限搜索</li><li>冲突核</li><li>Unicode 码点</li><li>隔离沙盒</li>
+    </ul>
+    <div class="proof-metrics" id="hero-metrics" role="status" aria-live="polite">
+      <div><span>候选组合</span><strong>—</strong><small>3⁴ 有限空间</small></div>
+      <div><span>满足条件</span><strong>—</strong><small>当前沙盒条件</small></div>
+      <div><span>求解耗时</span><strong>—</strong><small>本地毫秒</small></div>
+      <div><span>付费调用</span><strong>0</strong><small>本页不触网</small></div>
+    </div>
+  </section>
+
+  <section class="proof-section" id="protocol" aria-labelledby="protocol-title">
+    <div class="proof-heading">
+      <div><p class="proof-kicker">01 / SUBMIT PROTOCOL</p><h2 id="protocol-title">两个窗口同时提交，只有一个能成功。</h2></div>
+      <span class="proof-badge" id="revision-badge">read only</span>
+    </div>
+    <p class="proof-copy">每次改动都带着它读到的 revision 提交。服务端在 <code>BEGIN IMMEDIATE</code> 事务里复核；版本落后就返回 409，并在错误里给出当前版本。下面操作的是隔离的 <code>proof.sqlite3</code>，不会碰你的正式成果。</p>
+    <div class="proof-split">
+      <div class="proof-card protocol-live">
+        <div class="proof-row between"><span class="proof-label">沙盒会话</span><strong id="proof-session">读取中…</strong></div>
+        <div class="proof-row between"><span class="proof-label">当前 revision</span><strong id="proof-revision">—</strong></div>
+        <div class="proof-row between"><span class="proof-label">锁定章节</span><strong id="proof-lock">—</strong></div>
+        <div class="proof-actions">
+          <button class="proof-button primary" id="toggle-lock" type="button">锁定章节</button>
+          <button class="proof-button" id="stale-submit" type="button">用旧版本再提交</button>
+          <button class="proof-button quiet" id="reset-proof" type="button">重建沙盒</button>
+        </div>
+        <p class="proof-note" id="protocol-status" role="status" aria-live="polite">正在读取沙盒状态。</p>
+        <ol class="protocol-flow" aria-label="提交协议步骤">
+          <li><span>1</span>读取 revision 与当前组合</li>
+          <li><span>2</span>提交改动与期望 revision</li>
+          <li><span>3</span>事务内复核版本并计算新状态</li>
+          <li><span>4</span>写入新快照并 +1，或返回 409</li>
+        </ol>
+      </div>
+      <div class="proof-card">
+        <h3>快照链校验</h3>
+        <ul class="check-list" id="chain-checks"><li>读取中…</li></ul>
+        <p class="proof-note">这是本地一致性与审计校验，不是密码学不可篡改证明，也不是分布式共识。</p>
+      </div>
+    </div>
+    <div class="proof-card timeline-card">
+      <div class="proof-row between"><h3>事件与前后快照指纹</h3><span class="proof-label" id="event-count">—</span></div>
+      <div class="proof-table-wrap">
+        <table class="proof-table">
+          <thead><tr><th scope="col">seq</th><th scope="col">事件</th><th scope="col">rev</th><th scope="col">摘要</th><th scope="col">before</th><th scope="col">after</th></tr></thead>
+          <tbody id="event-rows"><tr><td colspan="6">读取中…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="proof-alert" id="protocol-conflict" hidden role="alert"></div>
+  </section>
+
+  <section class="proof-section" id="solver" aria-labelledby="solver-title">
+    <div class="proof-heading">
+      <div><p class="proof-kicker">02 / CONSTRAINT SOLVER</p><h2 id="solver-title">先算清楚为什么无解，再决定改哪一条。</h2></div>
+      <span class="proof-badge">0 API calls</span>
+    </div>
+    <p class="proof-copy">系统先枚举全部候选，再用位集求交过滤硬条件。无解时，它删除条件直到找到一组“再删任何一条就有解”的冲突核，并给出每种最小修正的候选证据。默认条件故意设成冲突，方便你直接看到结果。</p>
+    <div class="proof-controls" role="group" aria-label="求解条件">
+      <label class="proof-check"><input type="checkbox" id="solver-lock" checked> 锁定「实现方法」的第一版</label>
+      <label class="proof-check"><input type="checkbox" id="solver-require" checked> 必须保留「无需付费API」</label>
+      <label class="proof-select"><span>全文上限</span><select id="solver-max"><option value="">不限制</option><option value="200">200 字</option><option value="180">180 字</option><option value="150">150 字</option></select></label>
+    </div>
+    <div class="solver-metrics" id="solver-metrics" role="status" aria-live="polite">
+      <div><span>搜索空间</span><strong>—</strong></div><div><span>可行搭配</span><strong>—</strong></div><div><span>本地耗时</span><strong>—</strong></div><div><span>条件数</span><strong>—</strong></div>
+    </div>
+    <div class="proof-split solver-grid">
+      <div class="proof-card">
+        <h3>冲突核 <span class="proof-label">不可再删</span></h3>
+        <ul class="core-list" id="solver-core"><li>计算中…</li></ul>
+        <p class="proof-note" id="solver-note"></p>
+      </div>
+      <div class="proof-card">
+        <h3>逐项移除的只读分析</h3>
+        <ul class="sensitivity-list" id="solver-sensitivity"><li>计算中…</li></ul>
+        <p class="proof-note">各项新增可能重叠，不能相加；这里没有自动放宽任何条件。</p>
+      </div>
+    </div>
+    <div class="proof-card">
+      <h3>最小修正集合 <span class="proof-label" id="correction-count">—</span></h3>
+      <div class="correction-grid" id="solver-corrections"><p class="proof-note">计算中…</p></div>
+      <p class="proof-note">修正只说明“放宽这些条件后存在候选”，不会替你采用；当前组合仍然不可用。候选中的 A / B / C 对应每章三个版本的现有顺序。</p>
+    </div>
+    <details class="proof-details"><summary>查看求解器的边界与指纹</summary><p id="solver-limits"></p><p class="mono" id="solver-fingerprint"></p></details>
+  </section>
+
+  <section class="proof-section" id="splice" aria-labelledby="splice-title">
+    <div class="proof-heading">
+      <div><p class="proof-kicker">03 / EXACT SELECTION</p><h2 id="splice-title">改一句话，不重写整篇。</h2></div>
+      <span class="proof-badge">SHA-256</span>
+    </div>
+    <p class="proof-copy">选区用 Unicode 码点记录，并同时保存前缀、后缀与选中文字的 SHA-256。模型只返回替换片段；服务端自己拼接。原文或选区变化后，旧回执会被 409 拒绝。示例里同一句话出现两次，emoji 让码点与浏览器 UTF-16 下标相差 1。</p>
+    <div class="proof-split">
+      <div class="proof-card">
+        <label class="proof-field" for="splice-text">原文（可以改一个字，再试旧回执）</label>
+        <textarea id="splice-text" class="proof-textarea" rows="5" spellcheck="false">第一句保持不变。😀 这是要替换的句子。中间不变。这是要替换的句子。最后一句保持不变。</textarea>
+        <div class="splice-controls">
+          <label class="proof-select"><span>第几次出现</span><select id="splice-occurrence"><option value="1">第 1 次</option><option value="2">第 2 次</option></select></label>
+          <div class="splice-replacement">
+            <label class="proof-field" for="splice-replacement">替换为</label>
+            <input id="splice-replacement" class="proof-input" type="text" value="这是替换后的句子。" maxlength="3000">
+          </div>
+        </div>
+        <div class="proof-actions">
+          <button class="proof-button primary" id="splice-preview" type="button">定位选区</button>
+          <button class="proof-button" id="splice-apply" type="button">执行拼接</button>
+          <button class="proof-button" id="splice-stale" type="button">用过期回执提交</button>
+        </div>
+        <p class="proof-note" id="splice-status" role="status" aria-live="polite">正在定位示例选区。</p>
+      </div>
+      <div class="proof-card receipt-card">
+        <h3>替换回执</h3>
+        <dl class="receipt-list" id="splice-receipt"><div><dt>状态</dt><dd>读取中…</dd></div></dl>
+        <p class="proof-note">前缀与后缀哈希保证选区之外没有被顺手改掉；选区哈希单独锁定被替换的原文。</p>
+        <div class="splice-result" id="splice-result" hidden><span class="proof-label">拼接结果</span><p id="splice-output"></p></div>
+      </div>
+    </div>
+    <div class="proof-alert" id="splice-conflict" hidden role="alert"></div>
+  </section>
+
+  <section class="proof-section" id="ledger" aria-labelledby="ledger-title">
+    <div class="proof-heading">
+      <div><p class="proof-kicker">04 / JOB LEDGER</p><h2 id="ledger-title">模型作业，先冻结输入，再允许调用。</h2></div>
+      <span class="proof-badge">sanitized</span>
+    </div>
+    <p class="proof-copy">正式工作台里的每次生成都会冻结模型、配置与输入指纹，记录尝试次数和调用上限，并保留原始响应。这里只展示脱敏元数据，不展示正文、事实或密钥；为空表示本次运行还没有发起过模型作业。</p>
+    <div class="proof-card">
+      <div class="proof-table-wrap">
+        <table class="proof-table">
+          <thead><tr><th scope="col">作业</th><th scope="col">状态</th><th scope="col">尝试 / 上限</th><th scope="col">模型</th><th scope="col">输入指纹</th><th scope="col">创建</th></tr></thead>
+          <tbody id="ledger-rows"><tr><td colspan="6">读取中…</td></tr></tbody>
+        </table>
+      </div>
+      <p class="proof-note">账本字段经过白名单裁剪；详情与原始响应仍保存在正式存储中，由工作台审计查看。</p>
+    </div>
+  </section>
+
+  <section class="proof-section" id="why" aria-labelledby="why-title">
+    <div class="proof-heading">
+      <div><p class="proof-kicker">05 / WHY IT IS DIFFERENT</p><h2 id="why-title">和普通对话式生成的差别，在模型之后。</h2></div>
+    </div>
+    <div class="proof-table-wrap">
+      <table class="proof-table compare-table">
+        <thead><tr><th scope="col">能力</th><th scope="col">普通对话生成</th><th scope="col">拾构的本地程序</th></tr></thead>
+        <tbody>
+          <tr><td>并发修改</td><td>后写覆盖先写</td><td>revision CAS，旧版本返回 409</td></tr>
+          <tr><td>局部修改</td><td>模型重写整段，可能顺手改别处</td><td>服务端按码点拼接，选区外哈希不变</td></tr>
+          <tr><td>无解条件</td><td>让模型“再想想”</td><td>有限枚举 + 位集过滤 + 冲突核 + 最小修正</td></tr>
+          <tr><td>偏好与交付</td><td>没有可复核的边界</td><td>偏好仅来自明确比较；机器检查与人工确认分开记录</td></tr>
+          <tr><td>模型调用</td><td>失败后静默重试</td><td>冻结输入、调用上限、尝试记录，失败不伪装成功</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="proof-split">
+      <div class="proof-card">
+        <h3>代码位置</h3>
+        <ul class="code-map">
+          <li><code>store.py</code><span>事务、revision、事件快照、训练标签边界</span></li>
+          <li><code>ai/decision.py</code><span>枚举、位集约束、前沿、冲突核、敏感度</span></li>
+          <li><code>ai/local_revision.py</code><span>码点选区、前后缀哈希、过期拒绝</span></li>
+          <li><code>ai/service.py</code><span>作业生命周期、幂等、冻结配置、上限</span></li>
+          <li><code>proof.py</code><span>本页的隔离沙盒与实时证据</span></li>
+        </ul>
+      </div>
+      <div class="proof-card">
+        <h3>边界，写在能力旁边</h3>
+        <ul class="limits-list">
+          <li>候选搜索是 3⁴ 的有限穷举，不是通用 SAT/ILP 求解器。</li>
+          <li>冲突核是删除式局部结果，不保证条件数最少，也不代表只有一处冲突。</li>
+          <li>偏好分是任务内模型的相对估计，不等于内容质量或真实用户收益。</li>
+          <li>链路校验证明本地快照一致，不提供密码学防篡改或跨节点共识。</li>
+          <li>真实 API 验收仍有内容失败记录；通过机器条件不等于可以不经人工核对直接交付。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="proof-card verify-card">
+      <h3>复现</h3>
+      <p>完整 Python 测试与真实 API 验收分开运行；本页和测试都不会自动发起付费调用。</p>
+      <pre class="proof-code"><code>.\.venv-research\Scripts\python.exe -B -m unittest discover -s tests -v</code></pre>
+      <p class="proof-note">隔离沙盒位于正式数据库同目录的 <code>proof.sqlite3</code>。重建沙盒只会新建一条 proof 会话，不删除历史记录。</p>
+    </div>
+  </section>
+</main>
+
+<footer class="proof-foot"><span>拾构 · Tessera</span><span>本地优先 · 证据优先</span><a href="/">回到工作室</a></footer>
+<script src="/proof.js" defer></script>
+</body>
+</html>

@@ -2,6 +2,16 @@
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const S={config:null,view:null,sid:null,jobs:[],materials:[],library:[],delivery:null,taskType:'auto',tab:'document',activeJob:null,proposal:null,editing:null,offer:null,busy:false};
+const EXAMPLES={
+  email:{type:'writing',text:'帮我写一封给导师的邮件，想约一次十五分钟交流，介绍我正在做的项目。语气礼貌直接，能直接发送。'},
+  project:{type:'project',text:'我会一点 Python，想在四周内做出一个能展示的校园失物招领项目。帮我明确用户、最小功能、每周任务和验收方式，不要堆功能。'},
+  study:{type:'study',text:'我想用课程资料制定一份两周复习计划，每天 90 分钟，先补薄弱章节，再安排整卷模拟和自测标准。'},
+  job:{type:'writing',text:'帮我准备一段面试用的自我介绍，投 AI 应用开发实习。用一个真实项目说明我能做什么，经历不要编造，不确定的地方标出来。'},
+  event:{type:'project',text:'帮我策划一场校园市集摊位，4 个人、预算 300 元、下周六，想要能落地的分工、物料清单和当天检查。'},
+  travel:{type:'project',text:'帮我安排一次三天两夜的城市旅行，两个人，预算 1200 元，喜欢步行和老街，给出每天路线、花费和下雨时的备选。'},
+  content:{type:'writing',text:'帮我写一条小红书，介绍我做的一个本地 AI 写作工具，目标读者是不会写提示词的人。要具体、不夸张，不编造用户数据。'},
+  analysis:{type:'analysis',text:'我在两个实习机会之间犹豫：一个方向更匹配但通勤远，一个更轻松但成长慢。帮我列出必要条件、证据缺口和下一步该问什么，不要替我拍板。'}
+};
 let toastTimer,pollTimer;
 function toast(text){$('#studio-toast').textContent=text;$('#studio-toast').classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#studio-toast').classList.remove('visible'),5000);}
 async function api(path,data){let response;try{response=await fetch(path,data===undefined?{cache:'no-store'}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});}catch{throw new Error('本地服务未连接，请检查启动窗口');}const value=await response.json();if(!response.ok){const error=new Error(value.error||'请求失败');error.status=response.status;throw error;}return value;}
@@ -53,7 +63,12 @@ function renderDocument(){
   const constraints=task.blocks.some(b=>b.fixed)?`<div class="task-conditions"><span>▣ ${Object.keys(task.facts).length} 项固定条件在任务记录中保留，不混入导出正文。</span><button id="view-conditions" class="button-quiet">查看条件</button></div>`:'';
   const lockCount=task.blocks.filter(b=>!b.fixed&&state.locks[b.id]).length;
   const requirements=[...(S.delivery?.requirements?.warnings||[]),...(S.delivery?.acceptance?.contract.confirmed?(S.delivery.acceptance.failures.map(f=>'已确认条件未通过：'+f.label)):[])];const requirementNotice=requirements.length?`<div class="requirement-notice"><i data-lucide="circle-alert" aria-hidden="true"></i><div>${requirements.map(w=>`<p>${esc(w)}</p>`).join('')}<button data-tab="sources">查看交付检查</button></div></div>`:'';
-  $('#document-view').innerHTML=`${journeyHTML()}<button class="document-overview-link" data-open-decision><i data-lucide="workflow" aria-hidden="true"></i><span>查看本次交付的条件、取舍与证据</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>${constraints}${requirementNotice}<article class="document-paper"><div class="document-heading"><span class="small-kicker">当前文稿</span><h2>${esc(task.title)}</h2><p>${esc(origin)} · ${lockCount} 处锁定</p><button id="ask-preference" class="button-quiet preference-entry">帮我挑一版 ↗</button></div>${sections}</article><p class="artifact-note">满意的部分可以保留。导出前，请通读一次完整成品。</p>`;refreshFocused();
+  $('#document-view').innerHTML=`${journeyHTML()}<button class="document-overview-link" data-open-decision><i data-lucide="workflow" aria-hidden="true"></i><span>查看本次交付的条件、取舍与证据</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>${swipeHandoffHTML()}${constraints}${requirementNotice}<article class="document-paper"><div class="document-heading"><span class="small-kicker">当前文稿</span><h2>${esc(task.title)}</h2><p>${esc(origin)} · ${lockCount} 处锁定</p><button id="ask-preference" class="button-quiet preference-entry">帮我挑一版 ↗</button></div>${sections}</article><p class="artifact-note">满意的部分可以保留。导出前，请通读一次完整成品。</p>`;refreshFocused();
+}
+function swipeHandoffHTML(){
+  const blocks=S.view?.task?.blocks?.filter(b=>!b.fixed)||[];
+  if(S.view?.task?.source!=='generated'||blocks.length<2)return '';
+  return `<a class="swipe-handoff" href="/swipe?sid=${encodeURIComponent(S.sid)}"><span class="swipe-handoff-copy"><span class="small-kicker">换一种更快的看法</span><b>不想读整篇？刷着挑。</b><small>每段只看三条完整写法，留下喜欢的；没挑的沿用当前版本。</small></span><span class="swipe-handoff-cta">开始刷着挑 <span aria-hidden="true">→</span></span></a>`;
 }
 function comboForCandidate(index){return Object.fromEntries(S.view.task.blocks.map(b=>[b.id,S.view.state.locks[b.id]||b.variants[index].id]));}
 function optimizationHTML(){
@@ -87,7 +102,41 @@ function renderCandidates(){
   const models={legacy:'记住具体版本',additive:'记住具体版本（固定先验）',interaction:'学习版本搭配',content_linear:'按内容推荐（实验）',content_frozen:'按内容与搭配推荐（固定特征，实验）',content_neural:'按内容与搭配推荐（可训练，实验）'};
   const selected=S.view.state.research?.model||'legacy';
   const learning=`<article class="source-card"><h3>让推荐跟上你的修改</h3><p>你明确选出的更好版本，用来改进本任务的推荐。按内容推荐可为新改写估分，仍需你确认。</p><label>本任务的推荐方式<select id="studio-learning-model" ${!S.view.research_available?'disabled':''}>${Object.entries(models).map(([key,label])=>`<option value="${key}" ${key===selected?'selected':''}>${label}</option>`).join('')}</select></label><button id="save-studio-learning" class="button-quiet" ${!S.view.research_available?'disabled':''}>保存推荐方式</button><button id="compare-studio-learning" class="button-quiet">比较两个版本 ↗</button><p>${S.view.research_warning?esc(S.view.research_warning):S.view.research_available?`已记录 ${S.view.pair_count} 次明确比较；选择、编辑和锁定不会变成偏好标签。`:'使用“启动研究工作台.cmd”可启用内容推荐；普通 AI 生成不受影响。'}</p>${selected.startsWith('content_')?'<details><summary>实验能力说明</summary><p>使用文字统计与词片段特征，不等于理解语义；模型在本任务内拟合，不训练或微调硅基流动大模型。少于4条比较时冻结小网络。搭配得分与预测未经真实用户效果验证，可随时切回基线。</p></details>':''}</article>`;
-  $('#candidates-view').innerHTML=`<div class="source-card"><h3>先选一个起点，再按你的目标调整</h3><p>三种方案按相同章节组织。切换会保留已锁定内容，你也可以在成品里只替换一个章节。</p>${S.view.pair_count&&best?.changes.length?`<p>根据本任务中 ${S.view.pair_count} 次明确比较，模型推荐调整：${esc(best.changes.join('、'))}。得分是相对效用估计。</p><button id="apply-preference-rank" class="button-quiet">采用偏好推荐组合</button>`:''}</div>${optimizationHTML()}${learning}${[0,1,2].map(j=>`<article class="candidate-card"><div class="candidate-number">${['A','B','C'][j]}</div><h3>${esc(labels[j])}</h3><div class="markdown">${markdown(text(task.blocks.find(b=>!b.fixed).variants[j]).slice(0,200))}</div><details><summary>查看完整方案</summary><div class="markdown">${task.blocks.filter(b=>!b.fixed).map(b=>`<h3>${esc(b.title)}</h3>${markdown(text(b.variants[j]))}`).join('')}</div></details><button data-candidate="${j}" class="button-primary">以这个方案继续 ↗</button></article>`).join('')}`;
+  $('#candidates-view').innerHTML=`<div class="source-card"><h3>先选一个起点，再按你的目标调整</h3><p>三种方案按相同章节组织。切换会保留已锁定内容，你也可以在成品里只替换一个章节。</p>${S.view.pair_count&&best?.changes.length?`<p>根据本任务中 ${S.view.pair_count} 次明确比较，模型推荐调整：${esc(best.changes.join('、'))}。得分是相对效用估计。</p><button id="apply-preference-rank" class="button-quiet">采用偏好推荐组合</button>`:''}</div>${optimizationHTML()}${learning}${structureCardHTML()}${[0,1,2].map(j=>`<article class="candidate-card"><div class="candidate-number">${['A','B','C'][j]}</div><h3>${esc(labels[j])}</h3><div class="markdown">${markdown(text(task.blocks.find(b=>!b.fixed).variants[j]).slice(0,200))}</div><details><summary>查看完整方案</summary><div class="markdown">${task.blocks.filter(b=>!b.fixed).map(b=>`<h3>${esc(b.title)}</h3>${markdown(text(b.variants[j]))}`).join('')}</div></details><button data-candidate="${j}" class="button-primary">以这个方案继续 ↗</button></article>`).join('')}`;
+}
+function structureCardHTML(){
+  if(!S.view)return '';
+  const blocks=S.view.task.blocks.filter(b=>!b.fixed);
+  return `<article class="source-card structure-card"><div class="structure-heading"><div><h3>章节与条件，也由你决定</h3><p>不只是换版本：可以添加自己的章节、删除、调整顺序，也可以改固定条件。</p></div><span class="structure-count">${blocks.length} 节 · ${Object.keys(S.view.task.facts).length} 项条件</span></div><div class="structure-actions"><button id="open-structure" class="button-quiet">编辑章节结构 ↗</button><button data-edit-facts class="button-quiet">编辑固定条件</button></div></article>`;
+}
+function renderStructureDialog(){
+  if(!S.view)return;
+  const blocks=S.view.task.blocks.filter(b=>!b.fixed);
+  $('#structure-sections').innerHTML=blocks.map((b,j)=>{
+    const current=b.variants.find(v=>v.id===S.view.state.combo[b.id])||b.variants[0];
+    const locked=Boolean(S.view.state.locks[b.id]);
+    return `<div class="structure-row"><div class="structure-row-copy"><b>${esc(b.title)}</b><small>${esc(text(current).replace(/\s+/g,' ').slice(0,46))}</small></div><div class="structure-row-actions"><button type="button" class="structure-icon" data-move-section="${esc(b.id)}" data-offset="-1" ${j===0?'disabled':''} title="上移">↑</button><button type="button" class="structure-icon" data-move-section="${esc(b.id)}" data-offset="1" ${j===blocks.length-1?'disabled':''} title="下移">↓</button><button type="button" class="structure-icon danger" data-remove-section="${esc(b.id)}" ${locked?'disabled':''} title="${locked?'请先解锁':'删除这一节'}">✕</button></div></div>`;
+  }).join('')||'<p class="empty-note">这份任务还没有可编辑的正文章节。</p>';
+}
+function renderFactsDialog(){
+  if(!S.view)return;
+  const facts=Object.entries(S.view.task.facts);
+  $('#facts-editors').innerHTML=facts.map(([key,value])=>`<div class="fact-row"><span class="fact-key">${esc(key)}</span><input data-fact-key="${esc(key)}" maxlength="500" value="${esc(value)}" aria-label="条件内容"><button type="button" class="structure-icon danger" data-drop-fact title="移除这项条件">✕</button></div>`).join('')||'<p class="empty-note">还没有固定条件。可以添加预算、期限或不能改变的事实。</p>';
+}
+function collectFacts(){
+  const rows=[...document.querySelectorAll('#facts-editors .fact-row')],facts=[],seen=new Set();
+  for(const row of rows){
+    const input=row.querySelector('[data-fact-key]');
+    const key=input.dataset.factKey,value=input.value.trim();
+    if(!value){
+      if(key)throw new Error('请填写这项条件，或点 ✕ 移除');
+      continue;
+    }
+    if(key&&seen.has(key))throw new Error('固定条件重复，请重新打开编辑器');
+    if(key)seen.add(key);
+    facts.push({...(key?{key}:{}),value});
+  }
+  return facts;
 }
 function renderSources(){
   const t=S.view.task,blue=t.ai?.blueprint||{};
@@ -97,7 +146,7 @@ function renderSources(){
   cards.push(acceptanceHTML());
   cards.push(`<article class="source-card"><h3>任务素材 · ${S.library.length} 份</h3><p>补充新信息后，可让 AI 基于最新资料继续修改。</p>${S.library.map(m=>`<p><b>${esc(m.id)} · ${esc(m.name)}</b> · ${m.text.length.toLocaleString()} 字</p>`).join('')}<button id="manage-materials" class="button-primary">补充 / 修改素材</button></article>`);
   if(S.delivery){const d=S.delivery;cards.push(`<article class="source-card evidence-overview"><div class="small-kicker">正文与原文对照</div><h3>交付前，把依据看清楚。</h3><p>逐段查看数字、引号措辞与引用原文的文字对应。缺少对应不代表事实错误，相同文字也不代表语义已核实。</p><div class="evidence-section-list">${(d.evidence?.sections||[]).map(s=>`<button data-evidence="${esc(s.block)}"><span>${esc(s.title)}</span><span>${s.review_items?`${s.review_items} 项待核对`:'查看文字对应'} <i data-lucide="chevron-right" aria-hidden="true"></i></span></button>`).join('')}</div></article>`);cards.push(`<article class="source-card"><span class="small-kicker">04 · 检查交付</span><h3>这份成果，可以交付了吗？</h3><p>${d.sections} 个章节 · ${d.characters.toLocaleString()} 字 · ${d.citation_count} 处不同引用</p>${d.preservation?.length?`<p>${d.preservation.filter(c=>c.passed).length}/${d.preservation.length} 处局部原文保留通过</p>`:''}${d.warnings.length?'<ul>'+d.warnings.map(w=>`<li>${esc(w)}</li>`).join('')+'</ul>':'<p>未发现已实现检查中的结构提示。</p>'}<div class="delivery-review">${Object.entries({read_through:'我已通读成品，内容完整',facts_checked:'我已核对事实、假设与素材',usable:'这份成果满足本次使用要求'}).map(([key,label])=>`<label><input type="checkbox" data-review="${key}" ${d.review[key]?'checked':''}>${label}</label>`).join('')}</div><p>勾选由你确认；正文、章节标题或素材改变后需重新确认。自动检查不判断事实真伪。</p><div class="guide-actions"><button class="button-quiet" data-journey-export="body">导出正文 ↓</button><button class="button-primary" data-journey-export="zip">导出成果与记录 ↗</button></div></article>`);}
-  cards.push(`<article class="source-card"><h3>固定事实与限制</h3>${Object.keys(t.facts).length?'<ul>'+Object.entries(t.facts).map(([k,v])=>`<li><b>${esc(k)}</b>：${esc(v)}</li>`).join('')+'</ul>':'<p>本任务没有单独设置固定事实。</p>'}<button id="fork-goal" class="button-quiet">更改目标或条件，创建新任务 ↗</button><p>旧成果和反馈保留，新任务的素材需重新附加。</p></article>`);
+  cards.push(`<article class="source-card"><h3>固定事实与限制 · 可修改</h3>${Object.keys(t.facts).length?'<ul>'+Object.entries(t.facts).map(([k,v])=>`<li><b>${esc(k)}</b>：${esc(v)}</li>`).join('')+'</ul>':'<p>本任务没有单独设置固定事实，可以随时补充。</p>'}<div class="structure-actions"><button data-edit-facts class="button-quiet">编辑这些条件</button><button id="fork-goal" class="button-quiet">从这份目标新建任务 ↗</button></div><p>条件会随任务保留；修改后正文引用同步更新，删除的条件保留为原文字。旧成果和反馈不丢失。</p></article>`);
   if(blue.assumptions?.length)cards.push(`<article class="source-card"><h3>初版使用的假设</h3><ul>${blue.assumptions.map(v=>`<li>${esc(v)}</li>`).join('')}</ul><p>可在对话中补充和纠正；后续修改会结合当前成稿与明确要求。</p></article>`);
   if(blue.questions?.length)cards.push(`<article class="source-card"><h3>值得补充的信息</h3><ul>${blue.questions.map(v=>`<li>${esc(v)}</li>`).join('')}</ul></article>`);
   if(warnings.length)cards.push(`<article class="source-card"><h3>生成检查提示</h3><p>模型曾返回不存在的素材引用，已移除：${esc([...new Set(warnings)].join('、'))}。这不等于其余事实经过外部验证，使用前仍需核查。</p></article>`);
@@ -188,12 +237,17 @@ document.addEventListener('click',e=>{const button=e.target.closest('button');if
   else if(button.id==='compare-studio-learning')run(showPreference);
   else if(button.id==='save-studio-learning')run(async()=>{if(['semantic_deep','semantic_linear'].includes($('#studio-learning-model').value)){const r=S.view.learning.runs.find(r=>r.compatible);if(!r)throw new Error('请先训练与当前反馈一致的本地模型');await mutate('learning_activate',{run:r.id,model_kind:$('#studio-learning-model').value});toast('已启用本地训练版本中的推荐模型');return;}const old=S.view.state.research||{};await mutate('research_config',{config:{model:$('#studio-learning-model').value,policy:old.policy||'uncertainty',context_mode:old.context_mode||'current',budget:old.budget??16,seed:old.seed??11,evaluate_only:old.evaluate_only??true,data_origin:old.data_origin||'unclassified',participant_id:old.participant_id||''}});toast('已保存；历史反馈仍对应原文字，新文字仅获得预测');});
   else if(button.id==='view-conditions')activateTab('sources');
+  else if(button.id==='open-structure'){renderStructureDialog();$('#structure-dialog').showModal();}
+  else if(button.hasAttribute('data-edit-facts')){renderFactsDialog();$('#facts-dialog').showModal();}
+  else if(button.dataset.moveSection)run(async()=>{await mutate('structure',{op:'move',block:button.dataset.moveSection,offset:Number(button.dataset.offset)});renderStructureDialog();});
+  else if(button.dataset.removeSection)run(async()=>{await mutate('structure',{op:'remove',block:button.dataset.removeSection});if($('#structure-dialog').open)renderStructureDialog();toast('已删除这一节；点撤回可以恢复');});
+  else if(button.dataset.dropFact){button.closest('.fact-row').remove();}
   else if(button.id==='fork-goal')run(async()=>{const task=S.view.task;await setHome();$('#goal-input').value=task.brief;$('#goal-facts').value=Object.entries(task.facts).map(([k,v])=>`${k}=${v}`).join('\n');$('.goal-constraints').open=true;$('#goal-input').focus();scheduleDraft();});
   else if(button.id==='apply-preference-rank')run(async()=>{await mutate('apply',{combo:S.view.ranking[0].combo});activateTab('document');toast('已采用符合约束的偏好推荐');});
   else if(button.id==='apply-verified-combo')run(async()=>{await mutate('apply',{combo:S.view.ranking[0].combo});activateTab('document');toast('已采用满足机器条件的组合，请继续核对内容。');});
   else if(button.id==='repair-acceptance')run(repairAcceptance);
   else if(button.dataset.preferenceChoice)run(async()=>{const mode=S.offer.response_mode;await mutate('compare',{offer:S.offer.id,choice:button.dataset.preferenceChoice,...explicitPreferenceReasons()});$('#preference-dialog').close();toast(mode==='evaluate_only'?'已记录偏好，成稿没有改变。':'已记录这次真实比较并应用选择。');activateTab('candidates');});
-  else if(button.dataset.example){const examples={project:'我会一点Python，想在四周内做出能展示的校园失物招领项目。请帮我明确真实用户、最小功能、技术路线、每周实施任务与验收方式，避免功能堆砌。',study:'我想用自己的课程资料制定两周复习计划。请按知识点、每天练习和自测标准组织，标明需要补充的信息。',writing:'我要向一个潜在合作伙伴介绍自己的项目。请从已有素材提炼核心价值、当前进展和合作诉求，给出能直接使用的完整表达。'};$('#goal-input').value=examples[button.dataset.example];$('#goal-input').focus();scheduleDraft();}
+  else if(button.dataset.example){const example=EXAMPLES[button.dataset.example];if(!example)return;$('#goal-input').value=example.text;if(example.type!==S.taskType){changeChoiceTaskType(example.type);document.querySelectorAll('[data-type]').forEach(el=>el.classList.toggle('active',el.dataset.type===example.type));}$('#goal-input').focus();scheduleDraft();}
 });
 $('#session-search').oninput=renderSessions;
 $('#toggle-focus').onclick=()=>toggleFocus();
@@ -205,7 +259,7 @@ $('#goal-form').onsubmit=e=>{e.preventDefault();run(generateGoal);};
 $('#revision-form').onsubmit=e=>{e.preventDefault();run(submitRevision);};
 $('#revision-input').onkeydown=e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();run(submitRevision);}};
 $('#show-brief').onclick=()=>activateTab('sources');
-$('#undo-studio').onclick=()=>run(async()=>{await mutate('undo');await loadHistory();toast('已撤回上一步');});
+$('#undo-studio').onclick=()=>run(async()=>{await mutate('undo');await loadHistory();if($('#structure-dialog').open)renderStructureDialog();if($('#facts-dialog').open)renderFactsDialog();toast('已撤回上一步');});
 $('#apply-proposal-dialog').onclick=()=>run(()=>applyProposal(S.proposal.id));
 $('#settings-form').onsubmit=e=>{e.preventDefault();run(()=>saveConnection(true));};
 $('#clear-api-key').onclick=()=>run(async()=>{await api('/api/ai/config',{base_url:$('#base-url-input').value.trim(),clear_key:true});await loadConfig();applyConnectionFields(S.config);populateConnectionProfiles();settingsFeedback(S.config.key_configured?'此接口环境变量仍提供Key；本地保存的Key已移除。':'已移除此接口本地保存的加密Key。');});
@@ -229,6 +283,9 @@ async function readMaterials(files,previous){
 $('#material-files').onchange=()=>run(async()=>{S.materials=await readMaterials($('#material-files').files,S.materials);$('#material-files').value='';materialChips();scheduleDraft();});
 $('#workspace-material-files').onchange=()=>run(async()=>{S.materialDraft=await readMaterials($('#workspace-material-files').files,collectMaterials());$('#workspace-material-files').value='';renderMaterialEditors();});
 $('#section-edit-form').onsubmit=e=>{e.preventDefault();run(async()=>{const blocks=structuredClone(S.view.task.blocks);const block=blocks.find(b=>b.id===S.editing);block.title=$('#section-edit-name').value.trim();block.variants.find(v=>v.id===S.view.state.combo[block.id]).template=$('#section-edit-text').value;await mutate('edit',{blocks});$('#edit-section-dialog').close();toast('已保存新版本，旧内容保留在历史中');});};
+$('#add-section-form').onsubmit=e=>{e.preventDefault();run(async()=>{await mutate('structure',{op:'add',title:$('#new-section-title').value,text:$('#new-section-text').value});$('#new-section-title').value='';$('#new-section-text').value='';renderStructureDialog();toast('已添加这一节；三个方案都会包含它');});};
+$('#add-fact-row').onclick=()=>$('#facts-editors').insertAdjacentHTML('beforeend','<div class="fact-row"><span class="fact-key">新</span><input data-fact-key="" maxlength="500" placeholder="例如：预算不超过500元" aria-label="新的固定条件"><button type="button" class="structure-icon danger" data-drop-fact title="移除这项条件">✕</button></div>');
+$('#facts-form').onsubmit=e=>{e.preventDefault();run(async()=>{const facts=collectFacts();await mutate('structure',{op:'facts',facts});$('#facts-dialog').close();toast('条件已更新，正文中的引用同步完成');});};
 async function exportArtifact(format){const result=await api(endpoint('/ai/export'),{revision:S.view.revision,format});$('#export-result').innerHTML=`<a href="${esc(result.url)}" download="${esc(result.filename)}">下载${format==='zip'?'交付包':'成品'} ↓</a><span id="export-file-path">已保存到 D 盘：${esc(result.path)}</span>`;$('#export-result').classList.remove('hidden');toast('已导出；交付包包含正文、素材原文与检查记录');}
 $('#export-md').onclick=()=>run(()=>exportArtifact(S.view.task.category==='writing'?'txt':'md'));$('#export-bundle').onclick=()=>run(()=>exportArtifact('zip'));
 const requestIds=new Map();
@@ -285,6 +342,6 @@ $('#revision-scope').addEventListener('change',scheduleRevisionDraft);
 window.addEventListener('beforeunload',event=>{const c=S.sid?revisionChannel:homeChannel;if(c?.ready&&JSON.stringify(c.read())!==c.last){event.preventDefault();event.returnValue='';}});
 document.addEventListener('change',event=>{if(event.target.dataset.review)run(async()=>{const checks=Object.fromEntries(Array.from(document.querySelectorAll('[data-review]')).map(input=>[input.dataset.review,input.checked]));try{await mutate('review',{checks});}catch(error){renderSources();throw error;}});});
 try{if(localStorage.getItem('intent-studio-focus')==='true')toggleFocus(true);}catch{}
-run(async()=>{await loadConfig();await loadDraft();await loadSessions();let saved;try{saved=localStorage.getItem('intent-studio-session');}catch{}if(saved){try{await openSession(saved);}catch(error){if(error.draftConflict)throw error;await setHome();await loadDraft();}}const {jobs}=await api('/api/ai/jobs');const pending=jobs.find(j=>['generate','revise','repair','local_revise'].includes(j.kind)&&['queued','running'].includes(j.status));if(pending){if(!S.sid&&pending.kind==='generate')S.autoOpenJobId=pending.id;renderProgress(pending);watch(pending.id);}else if(!S.sid){const recent=jobs.find(j=>j.kind==='generate');if(recent&&['error','interrupted','cancelled'].includes(recent.status))renderProgress(recent);}});
+run(async()=>{await loadConfig();await loadDraft();await loadSessions();let saved;try{saved=localStorage.getItem('intent-studio-session');}catch{}try{const linked=new URLSearchParams(location.search).get('sid');if(linked)saved=linked;}catch{}if(saved){try{await openSession(saved);}catch(error){if(error.draftConflict)throw error;await setHome();await loadDraft();}}const {jobs}=await api('/api/ai/jobs');const pending=jobs.find(j=>['generate','revise','repair','local_revise'].includes(j.kind)&&['queued','running'].includes(j.status));if(pending){if(!S.sid&&pending.kind==='generate')S.autoOpenJobId=pending.id;renderProgress(pending);watch(pending.id);}else if(!S.sid){const recent=jobs.find(j=>j.kind==='generate');if(recent&&['error','interrupted','cancelled'].includes(recent.status))renderProgress(recent);}});
 
 document.addEventListener('submit',event=>{if(event.target.id==='acceptance-form'){event.preventDefault();run(confirmAcceptance);}});

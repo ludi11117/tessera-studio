@@ -1,0 +1,38 @@
+{
+  "version": "tessera-page-v1",
+  "brief": "这是一份由拾构网页模块编译的展示页，演示结构化内容、有限设计方向与离线交付。内容介绍本项目已实现的能力。",
+  "components": {
+    "nav": {
+      "layout": "quiet",
+      "palette": "paper",
+      "content": {
+        "title": "Tessera · 输出示例"
+      }
+    },
+    "hero": {
+      "layout": "quiet",
+      "palette": "sage",
+      "content": {
+        "title": "把喜欢的，拼成你的。",
+        "body": "这是一份由拾构网页模块编译的展示页，演示结构化内容、有限设计方向与离线交付。内容介绍本项目已实现的能力。"
+      }
+    },
+    "projects": {
+      "layout": "editorial",
+      "palette": "paper",
+      "content": {
+        "title": "精选项目",
+        "body": "留下喜欢的细节｜按组件分别保留布局、色调与文案，再预览其他修改。\n让反馈参与选择｜明确比较方案，使用本地偏好模型探索取舍，并保留线性对照。\n把成果带走｜核对当前内容，导出无需构建、可离线打开的网页和版本证据。"
+      }
+    },
+    "contact": {
+      "layout": "quiet",
+      "palette": "paper",
+      "content": {
+        "title": "让想法继续发生。",
+        "body": "这是产品输出示例，不是已招募用户案例；不含表单后台。",
+        "url": ""
+      }
+    }
+  }
+}

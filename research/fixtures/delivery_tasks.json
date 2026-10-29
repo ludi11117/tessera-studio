@@ -1,0 +1,1406 @@
+{
+  "origin": "designed_tasks_not_real_user_results",
+  "scope": "four-component static personal/project showcase pages",
+  "tasks": [
+    {
+      "id": "design-01",
+      "slug": "backend-portfolio",
+      "title": "后端求职作品集",
+      "brief": "制作一个后端求职作品集，完成后再按这条要求微调：把项目介绍改成问题、实现、验证三个要点，保留导航文案。",
+      "materials": {
+        "starter": {
+          "name": "林舟",
+          "title": "后端工程实践",
+          "brief": "向招聘者介绍接口、数据一致性与错误恢复，不编造并发量。",
+          "projects": "任务队列｜实现重试与失败记录\n库存服务｜练习事务与幂等",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "mailto:backend-portfolio@example.test"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "nav.content",
+        "followup": "把项目介绍改成问题、实现、验证三个要点，保留导航文案。",
+        "contact_url": "mailto:backend-portfolio@example.test",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，nav.content 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 mailto:backend-portfolio@example.test，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "保留导航中的林舟，项目说明必须包含验证办法。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-02",
+      "slug": "frontend-portfolio",
+      "title": "前端求职作品集",
+      "brief": "制作一个前端求职作品集，完成后再按这条要求微调：项目区域改为紧凑布局，保留介绍区色调。",
+      "materials": {
+        "starter": {
+          "name": "周晴",
+          "title": "把交互做得清楚",
+          "brief": "展示可访问交互与响应式实践，面向前端团队。",
+          "projects": "组件库｜整理按钮和表单状态\n阅读页｜实现窄屏与键盘操作",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "https://example.org/contact/frontend-portfolio"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "hero.palette",
+        "followup": "项目区域改为紧凑布局，保留介绍区色调。",
+        "contact_url": "https://example.org/contact/frontend-portfolio",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，hero.palette 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 https://example.org/contact/frontend-portfolio，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "项目区域使用紧凑布局，介绍文案包含键盘操作。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-03",
+      "slug": "data-portfolio",
+      "title": "数据分析作品集",
+      "brief": "制作一个数据分析作品集，完成后再按这条要求微调：简化介绍文案，保持项目标题和说明原文。",
+      "materials": {
+        "starter": {
+          "name": "陈禾",
+          "title": "用数据回答具体问题",
+          "brief": "说明分析方法与局限，原始数据为公开教学数据。",
+          "projects": "通勤分析｜比较公开样本的出行方式\n消费看板｜检查缺失值与异常值",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "mailto:data-portfolio@example.test"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "projects.content",
+        "followup": "简化介绍文案，保持项目标题和说明原文。",
+        "contact_url": "mailto:data-portfolio@example.test",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，projects.content 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 mailto:data-portfolio@example.test，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "项目两行原文不变，介绍必须说明教学数据。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-04",
+      "slug": "design-portfolio",
+      "title": "交互设计作品集",
+      "brief": "制作一个交互设计作品集，完成后再按这条要求微调：把联系区域改成温和语气，保留项目布局。",
+      "materials": {
+        "starter": {
+          "name": "许言",
+          "title": "让复杂流程更容易开始",
+          "brief": "面向设计团队介绍练习项目，没有真实上线指标。",
+          "projects": "预约流程｜重画填写与确认步骤\n帮助中心｜梳理问题与入口",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "https://example.org/contact/design-portfolio"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "projects.layout",
+        "followup": "把联系区域改成温和语气，保留项目布局。",
+        "contact_url": "https://example.org/contact/design-portfolio",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，projects.layout 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 https://example.org/contact/design-portfolio，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "联系文案可交流，不能声称项目已上线。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-05",
+      "slug": "research-profile",
+      "title": "研究方向展示",
+      "brief": "制作一个研究方向展示，完成后再按这条要求微调：项目说明补充复现边界，保留导航色调。",
+      "materials": {
+        "starter": {
+          "name": "吴川",
+          "title": "围绕证据提出问题",
+          "brief": "介绍复现和实验记录，不声称已发表论文。",
+          "projects": "推荐复现｜记录参数与随机种子\n偏好实验｜比较线性和非线性基线",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "mailto:research-profile@example.test"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "nav.palette",
+        "followup": "项目说明补充复现边界，保留导航色调。",
+        "contact_url": "mailto:research-profile@example.test",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，nav.palette 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 mailto:research-profile@example.test，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "两项研究都说明评测或复现，不能杜撰论文。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-06",
+      "slug": "robotics-team",
+      "title": "机器人课程团队",
+      "brief": "制作一个机器人课程团队，完成后再按这条要求微调：缩短首屏并突出测试环境，保留联系文案。",
+      "materials": {
+        "starter": {
+          "name": "步进小组",
+          "title": "从感知到可检查的动作",
+          "brief": "展示课程演示；设备只在室内平整地面测试。",
+          "projects": "巡线车｜记录转弯与丢线恢复\n传感实验｜对照采样噪声",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "https://example.org/contact/robotics-team"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "contact.content",
+        "followup": "缩短首屏并突出测试环境，保留联系文案。",
+        "contact_url": "https://example.org/contact/robotics-team",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，contact.content 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 https://example.org/contact/robotics-team，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "首屏明确室内平整地面，联系文案保持原文。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-07",
+      "slug": "reading-club",
+      "title": "校园读书会",
+      "brief": "制作一个校园读书会，完成后再按这条要求微调：换一种项目排版，保留导航文案及读书会名称。",
+      "materials": {
+        "starter": {
+          "name": "共读计划",
+          "title": "从一本书开始交流",
+          "brief": "说明阅读分享形式；本页仅展示，不提供报名表单。",
+          "projects": "主题共读｜每次讨论一个问题\n书摘整理｜保留出处和个人感受",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "mailto:reading-club@example.test"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "nav.content",
+        "followup": "换一种项目排版，保留导航文案及读书会名称。",
+        "contact_url": "mailto:reading-club@example.test",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，nav.content 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 mailto:reading-club@example.test，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "项目呈现阅读与出处，不出现可在线报名的承诺。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-08",
+      "slug": "open-source",
+      "title": "开源练习项目",
+      "brief": "制作一个开源练习项目，完成后再按这条要求微调：让介绍更简洁，保留项目内容。",
+      "materials": {
+        "starter": {
+          "name": "小径工具",
+          "title": "让本地文件更好找",
+          "brief": "一个本地文件检索练习，只支持文件名搜索。",
+          "projects": "索引模块｜扫描指定目录\n查询模块｜按文件名显示路径",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "https://example.org/contact/open-source"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "projects.content",
+        "followup": "让介绍更简洁，保留项目内容。",
+        "contact_url": "https://example.org/contact/open-source",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，projects.content 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 https://example.org/contact/open-source，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "明确文件名搜索边界，不能称为全文语义搜索。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-09",
+      "slug": "community-garden",
+      "title": "社区花园介绍",
+      "brief": "制作一个社区花园介绍，完成后再按这条要求微调：把联系区改成清楚的参与说明，保留首屏布局。",
+      "materials": {
+        "starter": {
+          "name": "种子角",
+          "title": "一起照顾一小块绿意",
+          "brief": "页面展示维护事项；联系电话不公开，使用指定邮箱。",
+          "projects": "浇水记录｜记录日期与天气\n植物地图｜标注位置和名称",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "mailto:community-garden@example.test"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "hero.layout",
+        "followup": "把联系区改成清楚的参与说明，保留首屏布局。",
+        "contact_url": "mailto:community-garden@example.test",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，hero.layout 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 mailto:community-garden@example.test，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "联系入口必须为提供的邮箱，不添加电话号码。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-10",
+      "slug": "game-prototype",
+      "title": "游戏原型展示",
+      "brief": "制作一个游戏原型展示，完成后再按这条要求微调：调整项目区色调与文案，保留导航布局。",
+      "materials": {
+        "starter": {
+          "name": "像素航线",
+          "title": "一个关于探索的短原型",
+          "brief": "只完成单人离线原型，尚无联机功能。",
+          "projects": "航线探索｜实现移动和事件触发\n关卡编辑｜保存本地场景",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "https://example.org/contact/game-prototype"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "nav.layout",
+        "followup": "调整项目区色调与文案，保留导航布局。",
+        "contact_url": "https://example.org/contact/game-prototype",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，nav.layout 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 https://example.org/contact/game-prototype，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "清楚说明离线单人原型，不宣传多人联机。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-11",
+      "slug": "photography",
+      "title": "摄影练习说明页",
+      "brief": "制作一个摄影练习说明页，完成后再按这条要求微调：联系区改为简洁排版，保留首屏文案。",
+      "materials": {
+        "starter": {
+          "name": "顾白",
+          "title": "记录普通日子的光",
+          "brief": "这是文字作品说明页，不要求上传或生成图片。",
+          "projects": "街角练习｜观察早晚光线\n室内静物｜比较构图和曝光",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "mailto:photography@example.test"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "hero.content",
+        "followup": "联系区改为简洁排版，保留首屏文案。",
+        "contact_url": "mailto:photography@example.test",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，hero.content 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 mailto:photography@example.test，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "首屏原文保持，不能杜撰展览或获奖经历。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-12",
+      "slug": "writing-profile",
+      "title": "写作者主页",
+      "brief": "制作一个写作者主页，完成后再按这条要求微调：重写介绍为平实语气，保留项目色调。",
+      "materials": {
+        "starter": {
+          "name": "余墨",
+          "title": "把观察写成故事",
+          "brief": "展示原创练习方向，不宣称已有出版物。",
+          "projects": "城市短篇｜围绕日常场景写作\n人物访谈｜记录提问与授权范围",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "https://example.org/contact/writing-profile"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "projects.palette",
+        "followup": "重写介绍为平实语气，保留项目色调。",
+        "contact_url": "https://example.org/contact/writing-profile",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，projects.palette 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 https://example.org/contact/writing-profile，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "介绍平实且不添加出版或销量信息。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-13",
+      "slug": "language-tutor",
+      "title": "语言学习互助",
+      "brief": "制作一个语言学习互助，完成后再按这条要求微调：把项目说明写得更具体，保留导航文案。",
+      "materials": {
+        "starter": {
+          "name": "慢慢说",
+          "title": "练习开口，也练习倾听",
+          "brief": "提供学习经验交流，不保证考试分数或教学资质。",
+          "projects": "对话练习｜按生活主题准备问题\n错题整理｜记录易混表达",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "mailto:language-tutor@example.test"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "nav.content",
+        "followup": "把项目说明写得更具体，保留导航文案。",
+        "contact_url": "mailto:language-tutor@example.test",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，nav.content 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 mailto:language-tutor@example.test，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "项目包含可操作练习，不承诺提分。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-14",
+      "slug": "volunteer-profile",
+      "title": "志愿服务经历",
+      "brief": "制作一个志愿服务经历，完成后再按这条要求微调：缩短首屏，保留项目文案。",
+      "materials": {
+        "starter": {
+          "name": "向晚",
+          "title": "把小事认真完成",
+          "brief": "经历来自校园活动协助，不添加服务时长或人数。",
+          "projects": "签到协助｜核对名单并指引位置\n物资整理｜分类登记剩余用品",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "https://example.org/contact/volunteer-profile"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "projects.content",
+        "followup": "缩短首屏，保留项目文案。",
+        "contact_url": "https://example.org/contact/volunteer-profile",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，projects.content 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 https://example.org/contact/volunteer-profile，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "保留已有经历，不出现未提供的时长或人数。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-15",
+      "slug": "course-demo",
+      "title": "课程项目介绍",
+      "brief": "制作一个课程项目介绍，完成后再按这条要求微调：调整首屏布局并突出使用边界，保留联系区色调。",
+      "materials": {
+        "starter": {
+          "name": "笔记桥",
+          "title": "让课堂笔记有清楚结构",
+          "brief": "课程练习支持本地笔记分类，尚未实现多人协作。",
+          "projects": "笔记整理｜按主题和日期分类\n本地检索｜按标题查找内容",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "mailto:course-demo@example.test"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "contact.palette",
+        "followup": "调整首屏布局并突出使用边界，保留联系区色调。",
+        "contact_url": "mailto:course-demo@example.test",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，contact.palette 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 mailto:course-demo@example.test，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "明确本地单人使用，不宣称云同步协作。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-16",
+      "slug": "accessibility",
+      "title": "无障碍检查项目",
+      "brief": "制作一个无障碍检查项目，完成后再按这条要求微调：把项目区改成易读说明，保留导航色调。",
+      "materials": {
+        "starter": {
+          "name": "可达清单",
+          "title": "让入口对更多人可用",
+          "brief": "展示人工检查清单；不等于正式无障碍认证。",
+          "projects": "键盘检查｜核对焦点顺序\n文字检查｜查看说明和替代文本",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "https://example.org/contact/accessibility"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "nav.palette",
+        "followup": "把项目区改成易读说明，保留导航色调。",
+        "contact_url": "https://example.org/contact/accessibility",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，nav.palette 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 https://example.org/contact/accessibility，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "说明人工检查与认证的区别，保留键盘主题。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-17",
+      "slug": "science-notes",
+      "title": "科学学习笔记",
+      "brief": "制作一个科学学习笔记，完成后再按这条要求微调：联系文案改为欢迎讨论，保留项目布局。",
+      "materials": {
+        "starter": {
+          "name": "知微笔记",
+          "title": "从现象走到解释",
+          "brief": "介绍学习记录，所有结论需要注明适用条件。",
+          "projects": "摆动实验｜记录长度与周期\n光学笔记｜比较反射与折射",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "mailto:science-notes@example.test"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "projects.layout",
+        "followup": "联系文案改为欢迎讨论，保留项目布局。",
+        "contact_url": "mailto:science-notes@example.test",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，projects.layout 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 mailto:science-notes@example.test，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "联系文案欢迎讨论，不能宣称原创科学发现。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-18",
+      "slug": "student-startup",
+      "title": "学生创业构想",
+      "brief": "制作一个学生创业构想，完成后再按这条要求微调：改写介绍强调现阶段，保留导航内容。",
+      "materials": {
+        "starter": {
+          "name": "邻里借物",
+          "title": "从一个可验证的假设开始",
+          "brief": "当前只有构想与访谈提纲，没有真实订单或融资。",
+          "projects": "需求访谈｜了解借用场景\n原型验证｜演示物品列表与详情",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "https://example.org/contact/student-startup"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "nav.content",
+        "followup": "改写介绍强调现阶段，保留导航内容。",
+        "contact_url": "https://example.org/contact/student-startup",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，nav.content 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 https://example.org/contact/student-startup，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "明确构想阶段，不能新增订单、营收或融资。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-19",
+      "slug": "music-practice",
+      "title": "音乐练习档案",
+      "brief": "制作一个音乐练习档案，完成后再按这条要求微调：更换项目区域布局，保留联系文案与链接。",
+      "materials": {
+        "starter": {
+          "name": "小调练习室",
+          "title": "记录听见的进步",
+          "brief": "这是个人练习记录，不提供音频播放或课程购买。",
+          "projects": "节奏练习｜记录速度与稳定性\n听辨笔记｜比较旋律和和声",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "mailto:music-practice@example.test"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "contact.content",
+        "followup": "更换项目区域布局，保留联系文案与链接。",
+        "contact_url": "mailto:music-practice@example.test",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，contact.content 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 mailto:music-practice@example.test，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "内容仍为练习记录，不出现可播放或购买功能。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    },
+    {
+      "id": "design-20",
+      "slug": "sustainability",
+      "title": "可持续生活记录",
+      "brief": "制作一个可持续生活记录，完成后再按这条要求微调：让首屏更具体，保留项目色调。",
+      "materials": {
+        "starter": {
+          "name": "轻量生活",
+          "title": "从可观察的小改变开始",
+          "brief": "记录个人尝试，不把体验描述成科学减排数据。",
+          "projects": "物品清单｜记录维修与重复使用\n出行记录｜比较步行与公共交通",
+          "contact": "欢迎通过提供的联系方式交流这个项目。",
+          "url": "https://example.org/contact/sustainability"
+        },
+        "starting_style": {
+          "layout": "quiet",
+          "palette": "paper"
+        },
+        "preserve_path": "projects.palette",
+        "followup": "让首屏更具体，保留项目色调。",
+        "contact_url": "https://example.org/contact/sustainability",
+        "viewports": [
+          390,
+          1280
+        ],
+        "notes": "人物、组织与作品均为设计性评测素材；域名为示例地址，无须发送消息或访问外部站点。"
+      },
+      "rubric": [
+        {
+          "id": "four_sections",
+          "criterion": "导航、介绍、项目和联系四部分均可阅读，标题层级清楚。",
+          "review": "artifact"
+        },
+        {
+          "id": "project_content",
+          "criterion": "项目名称与材料一致，项目卡片包含具体说明。",
+          "review": "artifact"
+        },
+        {
+          "id": "preservation",
+          "criterion": "相对共同起点，projects.palette 对应的文案、布局或色调在微调后保持；无需断言像素几何完全相同。",
+          "review": "before_after"
+        },
+        {
+          "id": "contact",
+          "criterion": "联系入口准确使用 https://example.org/contact/sustainability，不添加其他未提供地址。",
+          "review": "link"
+        },
+        {
+          "id": "responsive",
+          "criterion": "390px 与 1280px 下无页面横向溢出，文字和联系入口可访问。",
+          "review": "browser"
+        },
+        {
+          "id": "standalone",
+          "criterion": "导出的网页可以独立打开，主要内容不依赖开发服务器。",
+          "review": "browser"
+        },
+        {
+          "id": "project_specific",
+          "criterion": "强调个人记录，不添加未经测量的减排数字。",
+          "review": "human"
+        },
+        {
+          "id": "no_invention",
+          "criterion": "不新增未提供的身份、经历、成效数字或可用功能；已知边界有保留。",
+          "review": "human"
+        }
+      ]
+    }
+  ]
+}

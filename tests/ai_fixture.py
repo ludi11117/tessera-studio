@@ -8,7 +8,10 @@ def fixture_transport(path,payload=None):
         return {"data":[{"id":"test/fixture-model"}]}
     request=json.loads(payload['messages'][-1]['content'])
     operation=request['operation']
-    if operation=='仅改写选中的文字':
+    if operation=='网页组件文案':
+        current=request['current_content']
+        value={'options':[{'label':'清楚直接','content':{**current,'title':current['title']+' · 更清晰'}},{'label':'自然表达','content':{**current,'title':current['title']+' · 更自然'}}]}
+    elif operation=='仅改写选中的文字':
         count=2 if '恰好2个' in request['requirements'] else 1
         value={'options':[{'label':'开发版本'+str(i+1),'replacement':request['selected_text']+('（表达更清楚）' if i==0 else '（换一种表达）')} for i in range(count)]}
     elif operation=='围绕当前需求探索具体灵感':

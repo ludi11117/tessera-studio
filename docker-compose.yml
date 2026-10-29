@@ -1,0 +1,14 @@
+services:
+  tessera:
+    build: .
+    ports:
+      - "127.0.0.1:8765:8765"
+    environment:
+      TESSERA_LOG_LEVEL: normal
+      TESSERA_OPEN: "0"
+    volumes:
+      - tessera-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  tessera-data:

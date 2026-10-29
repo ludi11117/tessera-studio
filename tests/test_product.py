@@ -177,6 +177,42 @@ class ProductTests(unittest.TestCase):
         with self.assertRaises(Invalid):self.action(sid,'edit',blocks=blocks)
         self.assertEqual(checks,self.store.view(sid)['state']['review'])
 
+    def test_structure_and_conditions_are_fully_editable_with_undo(self):
+        sid=self.generate();view=self.store.view(sid);facts=view['task']['facts']
+        self.assertEqual(['fixed_facts','section1','section2','section3'],[b['id'] for b in view['task']['blocks']])
+        self.action(sid,'structure',op='add',title='我补充的一节',text='这一节由我指定，三个方案保持一致。')
+        view=self.store.view(sid)
+        self.assertEqual('我补充的一节',view['task']['blocks'][-1]['title'])
+        self.assertIn('custom-1',view['state']['combo'])
+        self.assertIn('这一节由我指定',view['text'])
+        self.action(sid,'structure',op='move',block='custom-1',offset=-1)
+        self.assertEqual('custom-1',self.store.view(sid)['task']['blocks'][-2]['id'])
+        self.action(sid,'undo')
+        self.assertEqual('custom-1',self.store.view(sid)['task']['blocks'][-1]['id'])
+        updated=[{'key':'f1','value':'本地保存于D盘，不依赖联网服务'},{'value':'每次修改先预览再采用'}]
+        self.action(sid,'structure',op='facts',facts=updated)
+        view=self.store.view(sid)
+        self.assertEqual(2,len(view['task']['facts']))
+        self.assertEqual(1,len([b for b in view['task']['blocks'] if b.get('fixed')]))
+        self.assertIn('不依赖联网服务',view['text'])
+        self.assertIn('每次修改先预览再采用',view['text'])
+        self.action(sid,'undo')
+        self.assertEqual(facts,self.store.view(sid)['task']['facts'])
+        self.action(sid,'structure',op='facts',facts=[])
+        view=self.store.view(sid)
+        self.assertEqual({},view['task']['facts'])
+        self.assertFalse(any(b.get('fixed') for b in view['task']['blocks']))
+        self.assertIn(list(facts.values())[0],view['text'])
+        self.action(sid,'undo')
+        self.action(sid,'structure',op='remove',block='custom-1')
+        self.assertNotIn('custom-1',[b['id'] for b in self.store.view(sid)['task']['blocks']])
+        self.action(sid,'undo')
+        self.assertIn('custom-1',[b['id'] for b in self.store.view(sid)['task']['blocks']])
+        with self.assertRaises(Invalid):self.action(sid,'structure',op='remove',block='fixed_facts')
+        for block in ['section1','section2','section3']:
+            self.action(sid,'structure',op='remove',block=block)
+        with self.assertRaises(Invalid):self.action(sid,'structure',op='remove',block='custom-1')
+
     def test_one_block_generated_writing_supports_edit_compare_lock_and_export(self):
         def single(path,payload=None):
             result=fixture_transport(path,payload)

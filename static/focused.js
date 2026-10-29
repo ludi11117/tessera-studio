@@ -64,6 +64,7 @@ async function showLocalJob(jobOrId){
   if(!$('#local-dialog').open)$('#local-dialog').showModal();
 }
 function mountFocused(){
+  $('#goal-form').insertAdjacentHTML('beforebegin','<a class="web-entry" href="/web-studio"><span>想把想法变成网页？<small>选方向 · 保留喜欢的设计 · 导出可运行作品</small></span><b>做一个展示页 ↗</b></a>');
   $('#open-settings').insertAdjacentHTML('beforebegin','<button id="workspace-mode-toggle" type="button" class="button-quiet">完整工作台</button>');
   document.body.insertAdjacentHTML('beforeend','<div id="selection-toolbar" class="selection-toolbar hidden" role="group" aria-label="选中文字的局部调整"></div><dialog id="local-dialog" class="studio-dialog local-dialog"><div class="dialog-heading"><div><span class="small-kicker">保留整体 · 微调局部</span><h2>打磨这一处</h2></div><button type="button" class="button-quiet" data-close="local-dialog">关闭 ✕</button></div><div id="local-content"></div></dialog>');
   let full=false;try{full=localStorage.getItem('tessera-workspace-mode')==='full';}catch{}setWorkspaceMode(full);

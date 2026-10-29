@@ -1,0 +1,33 @@
+name: Verify artifact contracts
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  web-artifact:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONIOENCODING: utf-8
+      PLAYWRIGHT_SKIP_BROWSER_GC: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: python -B -m unittest discover -s tests -p test_webcraft.py -v
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:web
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: web-proof-${{ matrix.os }}
+          path: docs/validation/webcraft
+          retention-days: 14

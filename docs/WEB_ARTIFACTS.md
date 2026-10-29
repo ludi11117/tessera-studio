@@ -1,0 +1,26 @@
+# 可运行网页与属性级保留
+
+打开 `/web-studio`，或从工作室首页进入“做一个展示页”。填写展示内容，选择本地设计方向，点选预览中的组件，在布局×色调矩阵里调整，再核对并导出。三个方向由同一份资料确定性渲染，不冒充模型生成。
+
+## 提交协议
+
+网页使用封闭 Schema：导航、首屏、项目、联系四个稳定组件 ID；每个组件分别具有 layout、palette 和 content。保留条件绑定属性值的 SHA-256，而非让模型记住“不要修改”。服务端只接受白名单补丁，验证全部条件后，在 `BEGIN IMMEDIATE` 事务内核对 revision 并写入新状态与审计记录。旧版本提交返回 409。预览不写入成果，撤回追加历史而不删除事件。
+
+每次修改给出选定属性及其他属性的前后哈希收据。它证明结构化属性未变，不保证内容变长后几何尺寸、跨浏览器像素或语义保持。四组件×三布局×三色调是有限设计空间，并非任意网页编辑器。
+
+`webcraft/model.py` 管 Schema、补丁和保留；`store.py` 管独立 websites.sqlite3、事务和快照；`render.py` 将数据编译为转义后的 HTML/CSS。模型只提出文案，不返回可执行代码。联系地址限制 HTTPS/mailto，导出的 index.html 无脚本和外部依赖。ZIP 包含源文档和版本证据，绑定当前内容的人工确认后才可导出。文件保存到该服务数据目录的 exports 下；开发机为 D 盘。
+
+可选 web_copy 作业沿用现有配置冻结、幂等编号、单次请求预算、取消与原始响应留存。一次请求提供两个文案候选，采用前再次检查 revision。模型不得改联系地址或添加任意字段；本轮使用隔离模拟供应商验证流程，真实付费调用 0。
+
+## 复现
+
+```powershell
+python -B -m unittest discover -s tests -p test_webcraft.py -v
+npm ci
+npx playwright install chromium
+npm run test:web
+```
+
+安装时设置 `PLAYWRIGHT_SKIP_BROWSER_GC=1`；Windows 将 TEMP/TMP、npm 缓存和 PLAYWRIGHT_BROWSERS_PATH 指向 D 盘。浏览器测试支持 PLAYWRIGHT_MODULE、TESSERA_BROWSER、INTENT_PYTHON、TESSERA_TEST_TEMP、TESSERA_QA_OUTPUT 环境配置。CI 覆盖 Windows/Linux 的网页契约与离线导出流程。
+
+本机检查包括属性保留、重复预览不写入、原子拒绝、撤回、模型草案来源、并发过期、人工确认失效、离线打开及六档响应布局。当前不包含参考网站解析、图像上传、任意 CSS/JavaScript 编辑、表单后台或公网托管。
