@@ -8,11 +8,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def snapshot(folder, backup=False):
+def snapshot(folder, backup=False, include_websites=False):
     result = {}
     for group, directory in [('production', ROOT/'data'), ('preview', Path('D:/CodexWork/temp/intent-v7-preview-20261027'))]:
         tables = {}
-        for name in ['workbench.sqlite3', 'assistant.sqlite3', 'learning.sqlite3']:
+        for name in ['workbench.sqlite3', 'assistant.sqlite3', 'learning.sqlite3']+(['websites.sqlite3'] if include_websites else []):
             file = directory/name
             if not file.exists():continue
             with sqlite3.connect(file.as_uri()+'?mode=ro', uri=True) as db:
@@ -38,10 +38,10 @@ def snapshot(folder, backup=False):
 
 
 if __name__ == '__main__':
-    p=argparse.ArgumentParser();p.add_argument('phase',choices=['before','after']);p.add_argument('--folder',type=Path,required=True);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('phase',choices=['before','after']);p.add_argument('--folder',type=Path,required=True);p.add_argument('--include-websites',action='store_true');a=p.parse_args()
     if a.folder.resolve().drive.upper()!='D:':raise ValueError('D: required')
     a.folder.mkdir(parents=True,exist_ok=True)
-    result=snapshot(a.folder,a.phase=='before')
+    result=snapshot(a.folder,a.phase=='before',a.include_websites)
     target=a.folder/(a.phase+'.json');target.write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8')
     if a.phase=='after':
         before=json.loads((a.folder/'before.json').read_text(encoding='utf-8'))

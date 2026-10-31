@@ -58,14 +58,33 @@ run(async()=>{try{const draft=JSON.parse(recall('tessera-web-intake')||'null');i
 $('#work-area').insertAdjacentHTML('beforebegin','<section id="preference-panel" class="ws-card" aria-live="polite"></section>');
 document.body.insertAdjacentHTML('beforeend','<dialog id="design-compare"><div class="dialog-head"><h2>哪一版更接近你想要的？</h2><button id="close-compare">暂不选择</button></div><p class="muted">两版使用当前文案，已保留的属性保持。选择只更新推荐，不直接替换网页。</p><div class="design-pair"><article><iframe id="design-a" title="设计 A" sandbox="allow-same-origin"></iframe><button data-design-vote="a">我更喜欢 A</button></article><article><iframe id="design-b" title="设计 B" sandbox="allow-same-origin"></iframe><button data-design-vote="b">我更喜欢 B</button></article></div></dialog>');
 async function refreshPreference(){
-  const id=W.view.id,rev=W.view.revision;
-  try{const r=await api(url('/preference'),{revision:rev});if(W.view.id!==id||W.view.revision!==rev)return;W.preference=r;
-  $('#preference-panel').innerHTML=`<h2>让下一版，更接近你。</h2><p class="muted">当前保留条件下有 ${r.eligible} 种合法设计，已有 ${r.feedback_count} 次明确比较。${r.archived_feedback?'文案变化前的 '+r.archived_feedback+' 条反馈已隔离。':''}</p><div class="inspector-actions"><button id="compare-design" class="primary" ${r.query?'':'disabled'}>${r.feedback_count?'再比较两版':'看两版，选喜欢的'}</button><button id="preview-learned" ${r.feedback_count&&r.recommendation.patches.length?'':'disabled'}>预览为我推荐的设计</button></div><details><summary>推荐与比较依据</summary><p class="muted">选择后立即在本机重新拟合成对偏好模型，再对全部合法组合排序。优先比较既难区分、又能补充偏好信息的两版；比较池最多24项。推荐需另行预览采用。${esc(r.note)}</p><p class="muted">模型指纹：${esc(r.weights_hash.slice(0,16))} · 本次推荐改动 ${r.recommendation.patches.length} 项属性</p></details>`;
-  }catch(e){$('#preference-panel').textContent=e.message;}
+  const id=W.view.id,rev=W.view.revision;W.preference=null;
+  $('#preference-panel').innerHTML='<p class="muted" role="status">正在按当前保留条件重新计算推荐…</p>';
+  try{
+    const r=await api(url('/preference'),{revision:rev});if(W.view.id!==id||W.view.revision!==rev)return;W.preference=r;
+    const rec=r.recommendation,changes=rec.contributions;
+    const summary=!r.feedback_count?'还没有比较记录，先选一次接近你想法的版本。':rec.score_gain<=1e-10?'当前设计已在模型的并列首选中，可以继续打磨，也可以直接核对交付。':`根据已有选择，建议调整 ${changes.length} 项设计属性，先看效果再决定。`;
+    const effect=r.last_update,shift=effect?.recommendation_changes;
+    $('#preference-panel').innerHTML=`<div class="preference-heading"><div><span class="kicker">你的选择 · 本地学习</span><h2>${r.feedback_count?'看看推荐怎样随你改变。':'先选喜欢的，再靠近你的版本。'}</h2></div><span class="preference-state">${r.feedback_count?'已学习 '+r.feedback_count+' 次选择':'等待第一次选择'}</span></div><div class="preference-metrics"><div><b>${r.eligible.toLocaleString()}</b><span>当前可选设计</span></div><div><b>${r.excluded.toLocaleString()}</b><span>被保留条件排除</span></div><div><b>${r.feedback_count}</b><span>本份文案的明确比较</span></div></div><p id="recommendation-summary">${summary}</p>${changes.length&&r.feedback_count?`<details class="recommendation-breakdown"><summary>查看 ${changes.length} 项推荐改动及依据</summary><ul class="recommendation-changes">${changes.map(c=>`<li>${designChange(c)}<small>模型分数差 +${c.score_delta.toFixed(3)}</small></li>`).join('')}</ul></details>`:''}${effect?`<section class="preference-effect"><b>上次选择 ${effect.selected.toUpperCase()} 后，推荐发生了什么？</b><p>${shift.length?'推荐调整了 '+shift.length+' 项属性。':'推荐保持不变。这次选择更新了模型，但没有改变首选设计。'}</p>${shift.length?`<details><summary>回看当时的变化</summary><ul>${shift.map(c=>`<li>${designChange(c)}</li>`).join('')}</ul></details>`:''}<small>这是当时推荐之间的变化；网页只有在你采用后才改变。</small></section>`:''}${r.archived_feedback?`<p class="muted">文案变化前的 ${r.archived_feedback} 条反馈已隔离，当前不参与推荐。</p>`:''}<div class="inspector-actions"><button id="compare-design" class="primary" ${r.query?'':'disabled'}>${r.feedback_count?'再比较两版':'看两版，选喜欢的'}</button><button id="preview-learned" ${r.feedback_count&&rec.score_gain>1e-10&&rec.patches.length?'':'disabled'}>预览为我推荐的设计</button></div>${!r.query?'<p class="muted">当前比较池没有未比较的合法组合；可以直接继续打磨与交付。</p>':''}<details id="preference-training"><summary>查看算法怎样学习这次选择</summary><p class="muted">24维设计特征 · 成对逻辑回归 · ${r.training.steps}次本地更新。下面仅是已有反馈上的训练记录，不代表新方案效果或真实满意度。</p>${trainingPlot(r.training)}<p class="muted">${r.note} 分数差表示模型排序依据，不是满意度提升比例。模型指纹：${esc(r.weights_hash.slice(0,16))}。</p></details>`;
+  }catch(e){if(W.view?.id===id&&W.view.revision===rev)$('#preference-panel').textContent=e.message;}
+}
+function designValue(field,value){return (field==='layout'?layouts:palettes)[value]||value;}
+function designChange(c){return `${esc(names[c.component])} · ${esc(fields[c.field])}：${esc(designValue(c.field,c.before))} → ${esc(designValue(c.field,c.after))}`;}
+function trainingPlot(t){
+  if(!t.feedbacks)return '<p class="muted">尚无训练反馈。没有绘制模拟曲线，也没有预设个人偏好。</p>';
+  const points=t.trace,values=points.map(p=>p.objective),low=Math.min(...values),high=Math.max(...values),range=Math.max(high-low,1e-9);
+  const path=points.map((p,i)=>`${i?'L':'M'}${(28+p.step/120*404).toFixed(2)},${(118-(p.objective-low)/range*90).toFixed(2)}`).join(' ');
+  return `<figure class="training-plot"><svg viewBox="0 0 460 148" role="img" aria-label="当前反馈上的实际训练目标变化"><path d="M28 20V118H432" fill="none" stroke="#c9cfca"/><path d="${path}" fill="none" stroke="#526e4b" stroke-width="2.5"/><text x="28" y="140">0次更新</text><text x="350" y="140">120次更新</text></svg><figcaption>正则化训练目标：${values[0].toFixed(4)} → ${values[values.length-1].toFixed(4)}。已有反馈中 ${t.fitted_directions}/${t.feedbacks} 条被模型排成所选方向${t.tied_directions?'，另有 '+t.tied_directions+' 条同分':''}；这不是测试集准确率。</figcaption></figure>`;
 }
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
-  if(b.id==='compare-design'){if(W.preference?.revision!==W.view.revision)return notice('推荐已过期，请刷新');$('#design-a').srcdoc=W.preference.query.a_html;$('#design-b').srcdoc=W.preference.query.b_html;$('#design-compare').showModal();}
+  if(b.id==='compare-design'){
+    if(!W.preference||W.preference.revision!==W.view.revision)return notice('推荐已过期，请刷新');
+    W.comparison={site:W.view.id,revision:W.preference.revision,query:W.preference.query};const q=W.comparison.query;
+    $('#design-a').srcdoc=q.a_html;$('#design-b').srcdoc=q.b_html;
+    $('#design-differences')?.remove();$('#design-compare .design-pair').insertAdjacentHTML('beforebegin',`<section id="design-differences"><b>两版差在这些地方</b><ul>${q.differences.map(c=>`<li>${designChange({...c,before:c.a,after:c.b})}</li>`).join('')}</ul><p class="muted">箭头左边为 A，右边为 B；其他属性与文案一致。系统从 ${q.pool_size} 份候选中挑出未比较的一对，兼顾模型难区分和可补充的信息；不保证这道问题全局最优。</p></section>`);
+    $('#design-compare').showModal();
+  }
   else if(b.id==='close-compare')$('#design-compare').close();
-  else if(b.dataset.designVote)run(async()=>{const r=W.preference;await action({kind:'compare',revision:r.revision,query:r.query.key,winner:b.dataset.designVote});$('#design-compare').close();notice('已更新你的偏好推荐；网页仍保持当前版本，可以预览后再采用。');});
-  else if(b.id==='preview-learned')run(()=>{if(W.preference.revision!==W.view.revision)throw new Error('推荐已过期，请刷新');return preview(W.preference.recommendation.patches);});
+  else if(b.dataset.designVote)run(async()=>{const r=W.comparison;if(!r||r.site!==W.view.id||r.revision!==W.view.revision)throw new Error('比较已过期，请重新打开');await action({kind:'compare',revision:r.revision,query:r.query.key,winner:b.dataset.designVote});$('#design-compare').close();W.comparison=null;notice('已更新你的偏好推荐，可以查看刚才选择带来的变化。');});
+  else if(b.id==='preview-learned')run(()=>{if(!W.preference||W.preference.revision!==W.view.revision)throw new Error('推荐已过期，请刷新');return preview(W.preference.recommendation.patches);});
 });
