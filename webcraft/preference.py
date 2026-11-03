@@ -5,6 +5,7 @@ uncertainty claim. Content snapshots isolate feedback after copy changes.
 """
 import itertools
 import math
+import random
 from webcraft.model import IDS,LAYOUTS,PALETTES,digest
 from core import Invalid
 
@@ -39,7 +40,8 @@ def fit(rows,diagnostics=False):
     return weights,fisher
 def patches(doc,choice):
     return [{'component':cid,'field':field,'value':choice[cid][field]} for cid in IDS for field in ('layout','palette') if doc['components'][cid][field]!=choice[cid][field]]
-def analyze(state):
+def analyze(state,query_policy='fisher',query_seed=0,excluded_pairs=()):
+    if query_policy not in ('fisher','entropy','random'):raise Invalid('未知比较策略')
     doc=state['document'];ctx=context(doc);rows=[r for r in state.get('preferences',[]) if r['context']==ctx];weights,fisher,training=fit(rows,True)
     choices=[]
     for cid in IDS:
@@ -51,11 +53,13 @@ def analyze(state):
     ranked=sorted(candidates,key=lambda c:(-c['score'],c['changes'],c['id']))
     # Cover high scorers plus a deterministic spread across the full legal bank.
     spread=candidates[::max(1,len(candidates)//12)]
-    pool=list({c['id']:c for c in ranked[:12]+spread[:12]}.values());seen={r['pair'] for r in rows};best=None
+    pool=list({c['id']:c for c in ranked[:12]+spread[:12]}.values());seen={r['pair'] for r in rows}|set(excluded_pairs);best=None;rng=random.Random(query_seed)
     for a,b in itertools.combinations(pool,2):
         key=digest(sorted([a['id'],b['id']]))
         if key in seen:continue
         d=[x-y for x,y in zip(a['features'],b['features'])];p=probability(a['score']-b['score']);value=p*(1-p)*sum(x*x/f for x,f in zip(d,fisher))
+        if query_policy=='entropy':value=p*(1-p)
+        elif query_policy=='random':value=rng.random()
         if best is None or value>best[0]:best=(value,key,a,b,p)
     top=ranked[0]
     result={'context':ctx,'feedback_count':len(rows),'archived_feedback':len(state.get('preferences',[]))-len(rows),'eligible':len(candidates),'method':'pairwise-logistic-diagonal-fisher-v1','recommendation':{'choice':top['choice'],'patches':patches(doc,top['choice']),'score':top['score']},'query':None,'weights_hash':digest(weights),'note':'有限设计空间精确筛选；选题采用小样本线性模型与对角Fisher启发式，不是校准置信度或最优询问保证。'}
@@ -71,6 +75,7 @@ def analyze(state):
     if best:
         value,key,a,b,p=best;result['query']={'key':key,'a':a['choice'],'b':b['choice'],'heuristic_value':value,'probability_a':p,'pool_size':len(pool)}
         result['query']['differences']=[{'component':cid,'field':field,'a':a['choice'][cid][field],'b':b['choice'][cid][field]} for cid in IDS for field in ('layout','palette') if a['choice'][cid][field]!=b['choice'][cid][field]]
+        result['query']['selection_policy']=query_policy
     return result
 def feedback(state,body):
     r=analyze(state);q=r['query']

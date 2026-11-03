@@ -94,7 +94,7 @@ AI 设置支持兼容 Chat Completions 的接口；填写自己的地址、模�
 
 ## 验证与边界
 
-截至 2026-10-31，160 项 Python 检查通过，覆盖提交协议、快照链、约束求解、Unicode 拼接、作业生命周期、隔离沙盒与本页 HTTP 接口。四步流程、上下文灵感、需求核对、局部改写、保留与导出已用隔离模拟供应商验证；本地语义查找使用实际 ONNX 编码器。
+截至 2026-11-03，165 项 Python 检查通过，覆盖提交协议、快照链、约束求解、Unicode 拼接、作业生命周期、隔离沙盒与本页 HTTP 接口。四步流程、上下文灵感、需求核对、局部改写、保留与导出已用隔离模拟供应商验证；本地语义查找使用实际 ONNX 编码器。
 
 模拟验证不能证明真实模型成品质量或用户时间收益。真实 API 验收仍记录过遗漏、误判、字数不足与违规新增章节，不能承诺任意任务直接交付。字面和语义定位都只提供核对线索；明确的机器规则与用户确认分别记录。/proof 的链路校验证明本地快照一致，不是密码学防篡改或分布式共识；约束求解是 3⁴ 的有限穷举，不是通用 SAT/ILP 求解器。
 
@@ -107,6 +107,7 @@ python -B -m unittest discover -s tests -q
 - [工程证据页与面试讲法](docs/INTERVIEW_GUIDE.md)
 - [网页成果与属性级保留](docs/WEB_ARTIFACTS.md)
 - [实际重训对照实验](docs/RETRAINING_STUDY.md)
+- [当前网页算法公平对照与失效分析](docs/WEB_PREFERENCE_STUDY.md)
 - [真实用户评测协议（待采集）](docs/DELIVERY_BENCHMARK.md)
 - [可离线打开的输出示例](examples/portfolio/index.html)
 - [四步体验](docs/FOUR_STEP_EXPERIENCE.md)

@@ -23,6 +23,7 @@ jobs:
           cache: npm
       - run: python -B -m unittest discover -s tests -p test_webcraft.py -v
       - run: python -B -m unittest discover -s tests -p test_web_preference.py -v
+      - run: python -B -m unittest discover -s tests -p test_web_study.py -v
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm run test:web
